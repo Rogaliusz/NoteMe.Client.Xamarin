@@ -3,29 +3,24 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-using Xamarin.Forms;
-
-using NoteMe.Client.Models;
-using NoteMe.Client.Services;
 
 namespace NoteMe.Client.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
-
-        bool isBusy = false;
+        bool _isBusy = false;
+        string _title = string.Empty;
+        
         public bool IsBusy
         {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
+            get { return _isBusy; }
+            set { SetProperty(ref _isBusy, value); }
         }
-
-        string title = string.Empty;
+        
         public string Title
         {
-            get { return title; }
-            set { SetProperty(ref title, value); }
+            get { return _title; }
+            set { SetProperty(ref _title, value); }
         }
 
         protected bool SetProperty<T>(ref T backingStore, T value,

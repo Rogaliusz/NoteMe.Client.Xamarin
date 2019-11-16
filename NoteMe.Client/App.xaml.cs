@@ -1,8 +1,7 @@
 ﻿using System;
+using NoteMe.Client.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using NoteMe.Client.Services;
-using NoteMe.Client.Views;
 
 namespace NoteMe.Client
 {
@@ -13,8 +12,7 @@ namespace NoteMe.Client
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
-            MainPage = new AppShell();
+            MainPage = new LoginView();
         }
 
         protected override void OnStart()

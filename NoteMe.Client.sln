@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteMe.Client.iOS", "NoteMe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteMe.Client", "NoteMe.Client\NoteMe.Client.csproj", "{5AE2C515-1328-4313-AD66-026DC286A224}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteMe.Common", "..\NoteMe.Common\src\NoteMe.Common\NoteMe.Common.csproj", "{4CA88AC0-7058-40BB-915D-C9A929C82CB1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,5 +55,17 @@ Global
 		{5AE2C515-1328-4313-AD66-026DC286A224}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{5AE2C515-1328-4313-AD66-026DC286A224}.Release|iPhone.ActiveCfg = Release|Any CPU
 		{5AE2C515-1328-4313-AD66-026DC286A224}.Release|iPhone.Build.0 = Release|Any CPU
+		{4CA88AC0-7058-40BB-915D-C9A929C82CB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CA88AC0-7058-40BB-915D-C9A929C82CB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CA88AC0-7058-40BB-915D-C9A929C82CB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CA88AC0-7058-40BB-915D-C9A929C82CB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CA88AC0-7058-40BB-915D-C9A929C82CB1}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{4CA88AC0-7058-40BB-915D-C9A929C82CB1}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{4CA88AC0-7058-40BB-915D-C9A929C82CB1}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{4CA88AC0-7058-40BB-915D-C9A929C82CB1}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{4CA88AC0-7058-40BB-915D-C9A929C82CB1}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{4CA88AC0-7058-40BB-915D-C9A929C82CB1}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{4CA88AC0-7058-40BB-915D-C9A929C82CB1}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{4CA88AC0-7058-40BB-915D-C9A929C82CB1}.Release|iPhone.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
