@@ -2,11 +2,10 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:NoteMe.Client.ViewModels;assembly=NoteMe.Client"
-             x:Class="NoteMe.Client.Views.LoginView"
->
+             xmlns:viewModels="clr-namespace:NoteMe.Client.ViewModels;assembly=NoteMe.Client"
+             x:Class="NoteMe.Client.Views.RegisterView">
     <ContentPage.BindingContext>
-        <vm:LoginViewModel  />
+        <viewModels:RegisterViewModel />
     </ContentPage.BindingContext>
     <RelativeLayout>
         <Image Source="unlogged_background.png"
@@ -32,13 +31,14 @@
             </StackLayout>
             
             <StackLayout Grid.Row="1" VerticalOptions="CenterAndExpand">
-                <Entry Placeholder="Login" Text="{Binding Email}"></Entry>
-                <Entry Placeholder="Password" IsPassword="True" Text="{Binding Password}" ></Entry>
+                <Entry Placeholder="Email" Text="{Binding Email}" ></Entry>
+                <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True"></Entry>
+                <Entry Placeholder="Repeat password" Text="{Binding ConfirmPassword}" IsPassword="True"></Entry>
             </StackLayout>
             
             <StackLayout Grid.Row="2">
-                <Button Text="Login" Command="{Binding LoginCommand}"></Button>
-                <Button Text="Go to register" Command="{Binding GoToRegisterCommand}"></Button>
+                <Button Text="Register" Command="{Binding RegisterCommand}"></Button>
+                <Button Text="Go to login" Command="{Binding GoToLoginCommand}"></Button>
             </StackLayout>
         </Grid>
     </RelativeLayout>

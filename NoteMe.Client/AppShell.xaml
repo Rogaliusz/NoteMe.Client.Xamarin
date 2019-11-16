@@ -29,10 +29,14 @@
             <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
         </ResourceDictionary>
     </Shell.Resources>
-     
-    <ShellContent>
-        <views:LoginView/>
-    </ShellContent>
+    
+    <ShellItem Route="login">
+        <ShellContent ContentTemplate="{DataTemplate views:LoginView}" />
+    </ShellItem>
+    
+    <ShellItem Route="register">
+        <ShellContent ContentTemplate="{DataTemplate views:RegisterView}" />
+    </ShellItem>
     
 
     

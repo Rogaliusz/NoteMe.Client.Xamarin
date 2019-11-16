@@ -1,4 +1,5 @@
 ﻿using System;
+using NoteMe.Client.ViewModels;
 using NoteMe.Client.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -12,7 +13,8 @@ namespace NoteMe.Client
         {
             InitializeComponent();
 
-            MainPage = new LoginView();
+            MainPage = new AppShell();
+            Shell.Current.GoToAsync("//login");
         }
 
         protected override void OnStart()

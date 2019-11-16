@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using NoteMe.Client.Views;
 using Xamarin.Forms;
 
 namespace NoteMe.Client.ViewModels
@@ -23,15 +24,22 @@ namespace NoteMe.Client.ViewModels
         }
         
         public ICommand LoginCommand { get; set; }
+        public ICommand GoToRegisterCommand { get; set; }
 
         public LoginViewModel()
         {
             LoginCommand = new Command(async () => await LoginAsync());
+            GoToRegisterCommand = new Command(async () => await GoToRegisterAsync());
         }
         
         private async Task LoginAsync()
         {
             Console.WriteLine("sss");
+        }
+        
+        private async Task GoToRegisterAsync()
+        {
+            Application.Current.MainPage = new RegisterView();
         }
     }
 }
