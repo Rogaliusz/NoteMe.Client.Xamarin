@@ -13,9 +13,41 @@
                    RelativeLayout.HeightConstraint=
                    "{ConstraintExpression Type=RelativeToParent, Property=Height}"/>
             <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-            <Label Style="{StaticResource NoteMeHeaderStyle}" Text="Hello, world!"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" />
+                <CollectionView ItemsSource="{Binding Notes}" Scrolled="ItemsView_OnScrolled" ScrollToRequested="ItemsView_OnScrollToRequested">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid BackgroundColor="{StaticResource Background}" Margin="10" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                                    <ColumnDefinition Width="0.8*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Image  Grid.Column="0" Grid.RowSpan="4"
+                                        Source="note_icon.png"
+                                        Margin="5"
+                                        HeightRequest="35"/>
+                                
+                                <Label  Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"
+                                        Text="{Binding Name}"
+                                        VerticalOptions="CenterAndExpand"
+                                        FontSize="16"/>
+                                
+                                <Label  Grid.Column="1" Grid.Row="3"
+                                        Text="{Binding CreatedAt}"
+                                        FontSize="10"
+                                        HorizontalOptions="EndAndExpand"/>
+                                
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </StackLayout>
         </RelativeLayout>
     </ContentPage.Content>

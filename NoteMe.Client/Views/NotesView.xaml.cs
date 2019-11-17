@@ -23,5 +23,13 @@ namespace NoteMe.Client.Views
             var viewModel = BindingContext as NotesViewModel;
             viewModel?.InitializeAsync();
         }
+
+        private void ItemsView_OnScrollToRequested(object sender, ScrollToRequestEventArgs e)
+        {
+        }
+
+        private void ItemsView_OnScrolled(object sender, ItemsViewScrolledEventArgs e)
+        {
+        }
     }
 }
