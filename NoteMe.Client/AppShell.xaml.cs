@@ -10,10 +10,13 @@ namespace NoteMe.Client
         public AppShell()
         {
             InitializeComponent();
-
-            BackgroundImageSource = ImageSource.FromFile("logged_background.png");
             
+            SetTabBarIsVisible(this, false);
+        }
 
+        private void AppShell_OnNavigated(object sender, ShellNavigatedEventArgs e)
+        {
+            Console.WriteLine("sss");
         }
     }
 }

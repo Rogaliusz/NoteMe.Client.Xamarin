@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using NoteMe.Client.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,7 +14,14 @@ namespace NoteMe.Client.Views
     {
         public NotesView()
         {
+            BindingContextChanged += HandleBindingContextChanged;
             InitializeComponent();
+        }
+
+        private void HandleBindingContextChanged(object sender, EventArgs e)
+        {
+            var viewModel = BindingContext as NotesViewModel;
+            viewModel?.InitializeAsync();
         }
     }
 }

@@ -4,12 +4,15 @@
        xmlns:d="http://xamarin.com/schemas/2014/forms/design" 
        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
        xmlns:views="clr-namespace:NoteMe.Client.Views;assembly=NoteMe.Client"
+       x:Class="NoteMe.Client.AppShell"
        mc:Ignorable="d" 
        BackgroundColor="#43BAB8"
        ForegroundColor="#EAF1CC"
        FlyoutBackgroundColor="#574E4E"
        Opacity="0.37"
-       Title="NoteMe.Client" x:Class="NoteMe.Client.AppShell">
+       Title="NoteMe.Client"
+       Navigated="AppShell_OnNavigated"
+       >
     <Shell.Resources>
         <ResourceDictionary>
             
@@ -19,22 +22,6 @@
                 <Setter Property="Shell.ForegroundColor" Value="{StaticResource Primary}"></Setter>
                 <Setter Property="Shell.BackgroundImageSource" Value="logged_background.png"></Setter>
             </Style>
-            
-            <!-- <Color x:Key="NavigationPrimary">#2196F3</Color> -->
-            <!-- <Style x:Key="BaseStyle" TargetType="Element"> -->
-            <!--     <Setter Property="Shell.BackgroundColor" Value="{StaticResource NavigationPrimary}" /> -->
-            <!--     <Setter Property="Shell.ForegroundColor" Value="White" /> -->
-            <!--     <Setter Property="Shell.TitleColor" Value="White" /> -->
-            <!--     <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" /> -->
-            <!--     <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" /> -->
-            <!--     <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource NavigationPrimary}" /> -->
-            <!--     <Setter Property="Shell.TabBarForegroundColor" Value="White" /> -->
-            <!--     <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF" /> -->
-            <!--     <Setter Property="Shell.TabBarTitleColor" Value="White" /> -->
-            <!--      -->
-            <!--      -->
-            <!-- </Style> -->
-            <!-- <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" /> -->
         </ResourceDictionary>
     </Shell.Resources>
     
@@ -70,7 +57,7 @@
                 <Image  Grid.Column="1"
                         Source="{Binding FlyoutIcon}"
                         Margin="5"
-                        HeightRequest="45" />
+                        HeightRequest="24"/>
             </Grid>
         </DataTemplate>
     </Shell.ItemTemplate>

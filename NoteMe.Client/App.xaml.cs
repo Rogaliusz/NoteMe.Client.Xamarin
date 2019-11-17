@@ -34,6 +34,7 @@ namespace NoteMe.Client
             Container.Register<IMapper>(mapper);
             
             RegisterAll(typeof(ICommandHandler));
+            RegisterAll(typeof(IQueryHandler));
         }
 
         private void RegisterAll(Type type)
@@ -66,7 +67,6 @@ namespace NoteMe.Client
                 MainPage = new AppShell();
                 navigationService.NavigateAsync("//main");
             }
-            
         }
 
         protected override void OnStart()

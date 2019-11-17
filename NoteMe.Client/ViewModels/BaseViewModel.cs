@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using NoteMe.Common.Providers;
 
-
 namespace NoteMe.Client.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
@@ -52,12 +51,34 @@ namespace NoteMe.Client.ViewModels
 
             try
             {
-                await _viewModelFacade.CommandDispatcher.DispatchAsync(commmand);
+                await _viewModelFacade.CommandDispatcher.DispatchAsync(commmand)
+                    .ConfigureAwait(false);
             }
             finally
             {
                 IsBusy = false;
             }
+        }
+        
+        protected async Task<TResult> DispatchQueryAsync<TQuery, TResult>(TQuery commmand)
+            where TQuery : IQueryProvider
+        {
+            IsBusy = true;
+
+            try
+            {
+                return await _viewModelFacade.QueryDispatcher.DispatchAsync<TQuery, TResult>(commmand)
+                    .ConfigureAwait(false);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public async virtual Task InitializeAsync(object parameter = null)
+        {
+            
         }
 
         protected TDest MapTo<TDest>(object obj) 
