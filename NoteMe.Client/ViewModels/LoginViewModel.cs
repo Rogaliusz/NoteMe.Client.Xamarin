@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using NoteMe.Client.Views;
+using NoteMe.Common.Domain.Users.Commands;
 using Xamarin.Forms;
 
 namespace NoteMe.Client.ViewModels
@@ -26,7 +27,7 @@ namespace NoteMe.Client.ViewModels
         public ICommand LoginCommand { get; set; }
         public ICommand GoToRegisterCommand { get; set; }
 
-        public LoginViewModel()
+        public LoginViewModel(IViewModelFacade viewModelFacade) : base(viewModelFacade)
         {
             LoginCommand = new Command(async () => await LoginAsync());
             GoToRegisterCommand = new Command(async () => await GoToRegisterAsync());
@@ -34,7 +35,12 @@ namespace NoteMe.Client.ViewModels
         
         private async Task LoginAsync()
         {
-            Console.WriteLine("sss");
+            var command = MapTo<LoginCommand>(this);
+            
+            await DispatchCommandAsync(command)
+                .ConfigureAwait(false);
+
+            await NavigateTo("//main");
         }
         
         private async Task GoToRegisterAsync()

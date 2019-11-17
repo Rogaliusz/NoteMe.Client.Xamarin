@@ -33,7 +33,7 @@ namespace NoteMe.Client.ViewModels
         public ICommand RegisterCommand { get; set; }
         public ICommand GoToLoginCommand { get; set; }
 
-        public RegisterViewModel()
+        public RegisterViewModel(IViewModelFacade viewModelFacade) : base(viewModelFacade)
         {
             RegisterCommand = new Command(async () => await RegisterAsync());
             GoToLoginCommand = new Command(execute: async () => await GoToLoginAsync());

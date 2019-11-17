@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using NoteMe.Common.Providers;
 
 
 namespace NoteMe.Client.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
+        private readonly IViewModelFacade _viewModelFacade;
+        
         bool _isBusy = false;
         string _title = string.Empty;
         
@@ -23,6 +27,11 @@ namespace NoteMe.Client.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
+        protected BaseViewModel(IViewModelFacade viewModelFacade)
+        {
+            _viewModelFacade = viewModelFacade;
+        }
+
         protected bool SetProperty<T>(ref T backingStore, T value,
             [CallerMemberName]string propertyName = "",
             Action onChanged = null)
@@ -35,6 +44,27 @@ namespace NoteMe.Client.ViewModels
             OnPropertyChanged(propertyName);
             return true;
         }
+
+        protected async Task DispatchCommandAsync<TCommmand>(TCommmand commmand)
+            where TCommmand : ICommandProvider
+        {
+            IsBusy = true;
+
+            try
+            {
+                await _viewModelFacade.CommandDispatcher.DispatchAsync(commmand);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        protected TDest MapTo<TDest>(object obj) 
+            => _viewModelFacade.Mapper.MapTo<TDest>(obj);
+
+        protected Task NavigateTo(string route)
+            => _viewModelFacade.NavigationService.NavigateAsync(route);
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

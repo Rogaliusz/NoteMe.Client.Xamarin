@@ -5,39 +5,67 @@
        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
        xmlns:views="clr-namespace:NoteMe.Client.Views;assembly=NoteMe.Client"
        mc:Ignorable="d" 
+       BackgroundColor="#43BAB8"
+       ForegroundColor="#EAF1CC"
+       FlyoutBackgroundColor="#574E4E"
+       Opacity="0.37"
        Title="NoteMe.Client" x:Class="NoteMe.Client.AppShell">
-    <!-- 
-        Styles and Resources 
-    -->
     <Shell.Resources>
         <ResourceDictionary>
             
-            <Color x:Key="NavigationPrimary">#2196F3</Color>
-            <Style x:Key="BaseStyle" TargetType="Element">
-                <Setter Property="Shell.BackgroundColor" Value="{StaticResource NavigationPrimary}" />
-                <Setter Property="Shell.ForegroundColor" Value="White" />
-                <Setter Property="Shell.TitleColor" Value="White" />
-                <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />
-                <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" />
-                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
-                <Setter Property="Shell.TabBarForegroundColor" Value="White" />
-                <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF" />
-                <Setter Property="Shell.TabBarTitleColor" Value="White" />
-                
-                
+            <Style TargetType="Element">
+                <Setter Property="Shell.Opacity" Value="0.37"></Setter>
+                <Setter Property="Shell.BackgroundColor" Value="{StaticResource BackgroundTabs}"></Setter>
+                <Setter Property="Shell.ForegroundColor" Value="{StaticResource Primary}"></Setter>
+                <Setter Property="Shell.BackgroundImageSource" Value="logged_background.png"></Setter>
             </Style>
-            <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
+            
+            <!-- <Color x:Key="NavigationPrimary">#2196F3</Color> -->
+            <!-- <Style x:Key="BaseStyle" TargetType="Element"> -->
+            <!--     <Setter Property="Shell.BackgroundColor" Value="{StaticResource NavigationPrimary}" /> -->
+            <!--     <Setter Property="Shell.ForegroundColor" Value="White" /> -->
+            <!--     <Setter Property="Shell.TitleColor" Value="White" /> -->
+            <!--     <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" /> -->
+            <!--     <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" /> -->
+            <!--     <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource NavigationPrimary}" /> -->
+            <!--     <Setter Property="Shell.TabBarForegroundColor" Value="White" /> -->
+            <!--     <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF" /> -->
+            <!--     <Setter Property="Shell.TabBarTitleColor" Value="White" /> -->
+            <!--      -->
+            <!--      -->
+            <!-- </Style> -->
+            <!-- <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" /> -->
         </ResourceDictionary>
     </Shell.Resources>
     
-    <ShellItem Route="login">
-        <ShellContent ContentTemplate="{DataTemplate views:LoginView}" />
-    </ShellItem>
+    <Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <Grid BackgroundColor="{StaticResource Background}" HeightRequest="200">
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                
+                <Label Grid.RowSpan="2" 
+                       Style="{StaticResource NoteMeHeaderStyle}" 
+                       Text="Welcome Janusz"
+                       VerticalOptions="CenterAndExpand"
+                       HorizontalOptions="CenterAndExpand">
+                </Label>
+            </Grid>
+        </DataTemplate>
+    </Shell.FlyoutHeaderTemplate>
     
-    <ShellItem Route="register">
-        <ShellContent ContentTemplate="{DataTemplate views:RegisterView}" />
-    </ShellItem>
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <StackLayout BackgroundColor="{StaticResource Background}"></StackLayout>
+        </DataTemplate>
+    </Shell.ItemTemplate>
     
-
+    <ShellItem Route="main" >
+        <ShellContent ContentTemplate="{DataTemplate views:NotesView}">
+        </ShellContent>
+    </ShellItem>
     
 </Shell>

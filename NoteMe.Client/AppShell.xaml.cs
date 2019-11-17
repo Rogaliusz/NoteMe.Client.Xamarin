@@ -10,6 +10,9 @@ namespace NoteMe.Client
         public AppShell()
         {
             InitializeComponent();
+
+            BackgroundImageSource = ImageSource.FromFile("logged_background.png");
+
         }
     }
 }

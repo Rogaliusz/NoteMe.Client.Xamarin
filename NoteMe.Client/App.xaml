@@ -2,13 +2,16 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:d="http://xamarin.com/schemas/2014/forms/design" 
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:NoteMe.Client.ViewModels;assembly=NoteMe.Client"
              mc:Ignorable="d" 
              x:Class="NoteMe.Client.App">
     <Application.Resources>
+        <viewModels:ViewModelLocator x:Key="ViewModelLocator" />
+        
         <Color x:Key="Primary">#EAF1CC</Color>
         <Color x:Key="Accent">#B0DBB9</Color>
-        <Color x:Key="Background">#707070</Color>
+        <Color x:Key="Background">#574E4E</Color>
         <Color x:Key="BackgroundTabs">#43BAB8</Color>
             
         <Style x:Key="NoteMeHeaderStyle" TargetType="Label">
