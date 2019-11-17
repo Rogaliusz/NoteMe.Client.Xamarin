@@ -33,5 +33,13 @@
             <Setter Property="TextColor" Value="{StaticResource Primary}"></Setter>
             <Setter Property="FontSize" Value="53"></Setter>
         </Style>
+        
+        <Style TargetType="Label" x:Key="MenuItemStyle">
+            <Setter Property="TextColor" Value="{StaticResource Primary}"></Setter>
+            <Setter Property="FontAttributes" Value="Bold"></Setter>
+            <Setter Property="HorizontalOptions" Value="EndAndExpand"></Setter>
+            <Setter Property="VerticalOptions" Value="CenterAndExpand"></Setter>
+        </Style>
+        
     </Application.Resources>
 </Application>

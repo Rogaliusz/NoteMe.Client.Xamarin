@@ -67,7 +67,9 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable\add_icon.png" />
     <AndroidResource Include="Resources\drawable\logged_background.png" />
+    <AndroidResource Include="Resources\drawable\note_icon.png" />
     <AndroidResource Include="Resources\drawable\unlogged_background.png">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>

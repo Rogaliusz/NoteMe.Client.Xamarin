@@ -40,32 +40,51 @@
     
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
-            <Grid BackgroundColor="{StaticResource Background}" HeightRequest="200">
-                
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                
-                <Label Grid.RowSpan="2" 
-                       Style="{StaticResource NoteMeHeaderStyle}" 
+            <StackLayout BackgroundColor="{StaticResource Background}" 
+                         HeightRequest="200"
+                         HorizontalOptions="CenterAndExpand"
+                         VerticalOptions="CenterAndExpand">
+                <Label Style="{StaticResource NoteMeHeaderStyle}" 
                        Text="Welcome Janusz"
                        VerticalOptions="CenterAndExpand"
                        HorizontalOptions="CenterAndExpand">
                 </Label>
-            </Grid>
+            </StackLayout>
         </DataTemplate>
     </Shell.FlyoutHeaderTemplate>
-    
-    <Shell.ItemTemplate>
-        <DataTemplate>
-            <StackLayout BackgroundColor="{StaticResource Background}"></StackLayout>
-        </DataTemplate>
-    </Shell.ItemTemplate>
     
     <ShellItem Route="main" >
         <ShellContent ContentTemplate="{DataTemplate views:NotesView}">
         </ShellContent>
     </ShellItem>
+    
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid BackgroundColor="{StaticResource Background}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.8*" />
+                    <ColumnDefinition Width="0.2*" />
+                </Grid.ColumnDefinitions>
+                <Label Text="{Binding Title}"
+                       Style="{StaticResource MenuItemStyle}"/>
+                <Image  Grid.Column="1"
+                        Source="{Binding FlyoutIcon}"
+                        Margin="5"
+                        HeightRequest="45" />
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+    
+    <FlyoutItem Title="Animals"
+                FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent Title="Notes"
+                      Icon="note_icon.png"
+                      ContentTemplate="{DataTemplate views:NotesView}" />
+        <ShellContent Title="Create note"
+                      Icon="add_icon.png"
+                      ContentTemplate="{DataTemplate views:CreateNoteView}" />  
+    </FlyoutItem>
+    
+
     
 </Shell>

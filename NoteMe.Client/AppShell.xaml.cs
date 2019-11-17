@@ -12,6 +12,7 @@ namespace NoteMe.Client
             InitializeComponent();
 
             BackgroundImageSource = ImageSource.FromFile("logged_background.png");
+            
 
         }
     }
