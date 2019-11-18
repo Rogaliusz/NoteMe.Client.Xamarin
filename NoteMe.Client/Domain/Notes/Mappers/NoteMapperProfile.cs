@@ -8,9 +8,12 @@ namespace NoteMe.Client.Domain.Notes.Mappers
     {
         public NoteMapperProfile()
         {
-            CreateMap<Note, NoteDto>();
-            CreateMap<CreateNoteCommand, Note>();
-            CreateMap<UpdateNoteCommand, Note>();
+            CreateMap<Note, NoteDto>()
+                .ReverseMap();
+            CreateMap<CreateNoteCommand, Note>()
+                .ReverseMap();
+            CreateMap<UpdateNoteCommand, Note>()
+                .ReverseMap();
             
             CreateMap<Attachment, AttachmentDto>();
             CreateMap<CreateAttachmentCommand, Attachment>();

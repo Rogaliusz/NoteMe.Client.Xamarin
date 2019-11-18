@@ -10,5 +10,6 @@ namespace NoteMe.Client.Domain.Synchronization
         public string Type { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastSynchronization { get; set; }
+        public int Order { get; set; }
     }
 }
