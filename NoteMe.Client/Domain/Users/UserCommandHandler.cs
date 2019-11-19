@@ -2,9 +2,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using NoteMe.Client.Framework.Cqrs;
 using NoteMe.Client.Framework.Mappers;
+using NoteMe.Client.Framework.Messages;
 using NoteMe.Common.DataTypes;
 using NoteMe.Common.Domain.Users.Commands;
 using NoteMe.Common.Domain.Users.Dto;
+using Xamarin.Forms;
 
 namespace NoteMe.Client.Domain.Users
 {
@@ -39,6 +41,8 @@ namespace NoteMe.Client.Domain.Users
         {
             var result = await _apiWebService.SendAsync<JwtDto>(HttpMethod.Post, Endpoints.Login, command);
             _apiWebSettings.JwtDto = result;
+            
+            MessagingCenter.Send(this, Messages.Logged);
         }
     }
 }

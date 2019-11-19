@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace NoteMe.Client.ViewModels
 {
-    public class RegisterViewModel : BaseViewModel
+    public class RegisterViewModel : ViewModelBase
     {
         private string _email;
         private string _password;

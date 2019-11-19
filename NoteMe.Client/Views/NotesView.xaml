@@ -3,7 +3,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NoteMe.Client.Views.NotesView"
-             BindingContext="{Binding Notes, Source={StaticResource ViewModelLocator}}">
+             BindingContext="{Binding NoteViewModel, Source={StaticResource ViewModelLocator}}">
     <ContentPage.Content>
         <RelativeLayout>
             <Image Source="logged_background.png"

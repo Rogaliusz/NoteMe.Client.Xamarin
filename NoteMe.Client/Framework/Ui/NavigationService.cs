@@ -18,7 +18,15 @@ namespace NoteMe.Client.Framework
 
         public async Task NavigateAsync(string route)
         {
-            MainThread.BeginInvokeOnMainThread(async () => { await Shell.Current.GoToAsync(route); });
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                if (Application.Current.MainPage.GetType() != typeof(AppShell))
+                {
+                    Application.Current.MainPage = new AppShell();
+                }
+
+                await Shell.Current.GoToAsync(route);
+            });
         }
     }
 }

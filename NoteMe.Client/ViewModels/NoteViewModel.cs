@@ -6,11 +6,11 @@ using NoteMe.Common.Domain.Pagination;
 
 namespace NoteMe.Client.ViewModels
 {
-    public class NotesViewModel : BaseViewModel
+    public class NoteViewModel : ViewModelBase
     {
         public ObservableCollection<NoteDto> Notes { get; set; } = new ObservableCollection<NoteDto>();
         
-        protected NotesViewModel(IViewModelFacade viewModelFacade) : base(viewModelFacade)
+        protected NoteViewModel(IViewModelFacade viewModelFacade) : base(viewModelFacade)
         {
         }
 

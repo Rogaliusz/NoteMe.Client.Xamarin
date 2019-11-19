@@ -39,6 +39,12 @@ namespace NoteMe.Client.Domain
             {
                 _tokenInstance = value;
 
+                if (value == null)
+                {
+                    Preferences.Set(TokenKey, null);
+                    return;
+                }
+
                 var serialized = JsonSerializeService.Serialize(value);
                 Preferences.Set(TokenKey, serialized);
             }

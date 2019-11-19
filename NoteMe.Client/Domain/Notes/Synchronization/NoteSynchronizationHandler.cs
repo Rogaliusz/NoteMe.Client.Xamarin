@@ -34,6 +34,12 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
         
         public async Task HandleAsync(Domain.Synchronization.Synchronization synchronization, NoteMeSqlLiteContext context, CancellationToken cts)
         {
+            await FetchAllResultsAsync(synchronization, context, cts);
+            await SendAllNotesAsync(context, cts);
+        }
+        
+        private async Task FetchAllResultsAsync(Domain.Synchronization.Synchronization synchronization, NoteMeSqlLiteContext context, CancellationToken cts)
+        {
             cts.ThrowIfCancellationRequested();
 
             var syncDate = synchronization.LastSynchronization;
@@ -58,7 +64,7 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
                     var note = await context.Notes.FirstOrDefaultAsync(x => x.Id == noteDto.Id, cts);
 
                     if (note != null) continue;
-                    
+
                     note = _mapper.MapTo<Note>(noteDto);
                     await context.AddRangeAsync(note);
 
@@ -67,14 +73,16 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
                         var history = await context.Notes.AsTracking().FirstOrDefaultAsync(x => x.Id == historical.Id, cts);
                         history.ActualNoteId = note.Id;
                     }
-
                 }
             } while (hasMore);
 
             await context.SaveChangesAsync(cts);
-            
+        }
+        
+        private async Task SendAllNotesAsync(NoteMeSqlLiteContext context, CancellationToken cts)
+        {
             cts.ThrowIfCancellationRequested();
-            
+
             var toInserts = await context.Notes.AsTracking().Where(x => x.CreatedAt == default(DateTime)).ToListAsync(cts);
             var insertsCommands = _mapper.MapTo<ICollection<CreateNoteCommand>>(toInserts);
             foreach (var command in insertsCommands)

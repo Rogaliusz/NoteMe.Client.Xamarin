@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:NoteMe.Client.ViewModels;assembly=NoteMe.Client"
              x:Class="NoteMe.Client.Views.RegisterView"
-             BindingContext="{Binding Register, Source={StaticResource ViewModelLocator}}" >
+             BindingContext="{Binding RegisterViewModel, Source={StaticResource ViewModelLocator}}" >
     <RelativeLayout>
         <Image Source="unlogged_background.png"
                Aspect="Fill"

@@ -7,9 +7,11 @@ using NoteMe.Client.Domain.Synchronization.Services;
 using NoteMe.Client.Framework;
 using NoteMe.Client.Framework.Cqrs;
 using NoteMe.Client.Framework.Mappers;
+using NoteMe.Client.Framework.Messages;
 using NoteMe.Client.ViewModels;
 using NoteMe.Client.Views;
 using TinyIoC;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Timer = System.Timers.Timer;
@@ -18,21 +20,37 @@ namespace NoteMe.Client
 {
     public partial class App : Application
     {
-        public CancellationTokenSource TokenSource { get; private set; }
+        public CancellationTokenSource SynchronizationTimerTokenSource { get; private set; }
         public Timer SynchronizationTimer { get; private set; }
         public TinyIoCContainer Container { get; private set; }
+        public ApiWebSettings ApiWebSettings { get; private set; }
         public bool IsLogged { get; private set; }
 
         public App()
         {
-            TokenSource = new CancellationTokenSource();
-            
             InitializeComponent();
             InitializeDependencies();
             InitializeTimer();
             InitializeStartPage();
+            InitializeSubscriptions();
+        }
+        
+        protected override void OnStart()
+        {
         }
 
+        protected override void OnSleep()
+        {
+        }
+
+        protected override void OnResume()
+        {
+            if (IsLogged && (SynchronizationTimer == null || !SynchronizationTimer.Enabled))
+            {   
+                InitializeTimer();
+            }
+        }
+        
         private void InitializeDependencies()
         {
             Container = TinyIoCContainer.Current;
@@ -62,22 +80,31 @@ namespace NoteMe.Client
             }
         }
         
-        private void InitializeTimer()
+        private void InitializeSubscriptions()
         {
-            SynchronizationTimer = new Timer {Interval = 1000 * 60};
-            SynchronizationTimer.Elapsed += async (sender, args) =>
+            MessagingCenter.Subscribe<object, object>(this, Messages.Logged, (sender, args) =>
             {
-                var syncService = Container.Resolve<ISynchronizationService>();
-                await syncService.SynchronizeAsync(TokenSource.Token);
-            };
+                InitializeTimer();
+            });
+            
+            MessagingCenter.Subscribe<object, object>(this, Messages.Logout, async (sender, args) =>
+            {
+                SynchronizationTimerTokenSource.Cancel(true);
+                SynchronizationTimer.Stop();
+                
+                var dbCleaner = Container.Resolve<ICleanService>();
+                await dbCleaner.CleanAsync();
+                
+                MainThread.BeginInvokeOnMainThread(InitializeStartPage);
+            });
         }
         
         private void InitializeStartPage()
         {
             var navigationService = Container.Resolve<INavigationService>();
-            var settings = Container.Resolve<ApiWebSettings>();
+            ApiWebSettings = Container.Resolve<ApiWebSettings>();
 
-            IsLogged = settings.JwtDto == null;
+            IsLogged = ApiWebSettings.JwtDto == null;
 
             if (!IsLogged)
             {
@@ -90,20 +117,20 @@ namespace NoteMe.Client
                 SynchronizationTimer.Start();
             }
         }
-
-        protected override void OnStart()
+        
+        private void InitializeTimer()
         {
-            // Handle when your app starts
+            SynchronizationTimerTokenSource = new CancellationTokenSource();
+            
+            SynchronizationTimer = new Timer {Interval = 1000 * 60};
+            SynchronizationTimer.Elapsed += async (sender, args) =>
+            {
+                var syncService = Container.Resolve<ISynchronizationService>();
+                await syncService.SynchronizeAsync(SynchronizationTimerTokenSource.Token);
+            };
+            
+            SynchronizationTimer.Start();
         }
-
-        protected override void OnSleep()
-        {
-            // Handle when your app sleeps
-        }
-
-        protected override void OnResume()
-        {
-            // Handle when your app resumes
-        }
+        
     }
 }

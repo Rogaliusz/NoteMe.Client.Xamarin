@@ -20,7 +20,7 @@ namespace NoteMe.Client.Views
 
         private void HandleBindingContextChanged(object sender, EventArgs e)
         {
-            var viewModel = BindingContext as NotesViewModel;
+            var viewModel = BindingContext as NoteViewModel;
             viewModel?.InitializeAsync();
         }
 

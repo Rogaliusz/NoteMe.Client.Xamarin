@@ -7,7 +7,7 @@ using NoteMe.Common.Providers;
 
 namespace NoteMe.Client.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
         private readonly IViewModelFacade _viewModelFacade;
         
@@ -26,7 +26,7 @@ namespace NoteMe.Client.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
-        protected BaseViewModel(IViewModelFacade viewModelFacade)
+        protected ViewModelBase(IViewModelFacade viewModelFacade)
         {
             _viewModelFacade = viewModelFacade;
         }
@@ -80,6 +80,9 @@ namespace NoteMe.Client.ViewModels
         {
             
         }
+
+        protected Task ShowDialogAsync(string title, string content, string cancel = "Cancel")
+            => _viewModelFacade.DialogService.ShowDialogAsync(title, content, cancel);
 
         protected TDest MapTo<TDest>(object obj) 
             => _viewModelFacade.Mapper.MapTo<TDest>(obj);

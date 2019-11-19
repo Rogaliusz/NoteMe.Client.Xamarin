@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace NoteMe.Client.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+    public class LoginViewModel : ViewModelBase
     {
         private string _email;
         private string _password; 
@@ -36,11 +36,18 @@ namespace NoteMe.Client.ViewModels
         private async Task LoginAsync()
         {
             var command = MapTo<LoginCommand>(this);
-            
-            await DispatchCommandAsync(command)
-                .ConfigureAwait(false);
 
-            await NavigateTo("//main");
+            try
+            {
+                await DispatchCommandAsync(command)
+                    .ConfigureAwait(false);
+
+                await NavigateTo("//main");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                await ShowDialogAsync("Incorrect credentials", "Please try again with correct credentials");
+            }
         }
         
         private async Task GoToRegisterAsync()

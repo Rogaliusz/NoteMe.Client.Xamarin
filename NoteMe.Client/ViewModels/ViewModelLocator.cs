@@ -4,8 +4,8 @@ namespace NoteMe.Client.ViewModels
 {
     public class ViewModelLocator
     {
-        public LoginViewModel Login => TinyIoCContainer.Current.Resolve<LoginViewModel>();
-        public RegisterViewModel Register => TinyIoCContainer.Current.Resolve<RegisterViewModel>();
-        public NotesViewModel Notes => TinyIoCContainer.Current.Resolve<NotesViewModel>();
+        public LoginViewModel LoginViewModel => TinyIoCContainer.Current.Resolve<LoginViewModel>();
+        public RegisterViewModel RegisterViewModel => TinyIoCContainer.Current.Resolve<RegisterViewModel>();
+        public NoteViewModel NoteViewModel => TinyIoCContainer.Current.Resolve<NoteViewModel>();
     }
 }
