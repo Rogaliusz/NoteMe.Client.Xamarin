@@ -43,10 +43,10 @@ namespace NoteMe.Client.iOS
                 Path = Path.Combine(libPath,
                     "database.sqlite")
             };
-
-            TinyIoCContainer.Current.Register(settings);
             
             LoadApplication(new App());
+            
+            TinyIoCContainer.Current.Register(settings);
 
             return base.FinishedLaunching(app, options);
         }

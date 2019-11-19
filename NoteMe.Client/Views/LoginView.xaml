@@ -30,6 +30,7 @@
             </StackLayout>
             
             <StackLayout Grid.Row="1" VerticalOptions="CenterAndExpand">
+                <ActivityIndicator IsRunning="{Binding IsBusy}"></ActivityIndicator>
                 <Entry Placeholder="Login" Text="{Binding Email}"></Entry>
                 <Entry Placeholder="Password" IsPassword="True" Text="{Binding Password}" ></Entry>
             </StackLayout>

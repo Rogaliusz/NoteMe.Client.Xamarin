@@ -15,6 +15,8 @@ namespace NoteMe.Client.Sql
         public NoteMeSqlLiteContext(SqliteSettings settings)
         {
             _settings = settings;
+
+            Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

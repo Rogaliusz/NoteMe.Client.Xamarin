@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NoteMe.Client.Framework.Cqrs;
@@ -42,7 +43,7 @@ namespace NoteMe.Client.Domain.Users
             var result = await _apiWebService.SendAsync<JwtDto>(HttpMethod.Post, Endpoints.Login, command);
             _apiWebSettings.JwtDto = result;
             
-            MessagingCenter.Send(this, Messages.Logged);
+            MessagingCenter.Send((object) this, Messages.Logged, new object());
         }
     }
 }

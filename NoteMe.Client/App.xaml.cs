@@ -30,7 +30,6 @@ namespace NoteMe.Client
         {
             InitializeComponent();
             InitializeDependencies();
-            InitializeTimer();
             InitializeStartPage();
             InitializeSubscriptions();
         }
@@ -114,7 +113,7 @@ namespace NoteMe.Client
             {
                 MainPage = new AppShell();
                 navigationService.NavigateAsync("//main");
-                SynchronizationTimer.Start();
+                InitializeTimer();
             }
         }
         
