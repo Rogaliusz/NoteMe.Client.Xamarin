@@ -44,9 +44,7 @@ namespace NoteMe.Client.ViewModels
             Console.WriteLine("sss");
         }
 
-        private async Task GoToLoginAsync()
-        {
-            Application.Current.MainPage = new LoginView();
-        }
+        private Task GoToLoginAsync()
+            => NavigateTo("//login");
     }
 }

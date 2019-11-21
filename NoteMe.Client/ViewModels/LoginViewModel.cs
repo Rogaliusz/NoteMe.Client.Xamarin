@@ -49,10 +49,8 @@ namespace NoteMe.Client.ViewModels
                 await ShowDialogAsync("Incorrect credentials", "Please try again with correct credentials");
             }
         }
-        
-        private async Task GoToRegisterAsync()
-        {
-            Application.Current.MainPage = new RegisterView();
-        }
+
+        private Task GoToRegisterAsync()
+            => NavigateTo("//register");
     }
 }

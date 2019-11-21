@@ -45,40 +45,17 @@
         </ShellContent>
     </ShellItem>
     
-    <Shell.ItemTemplate>
-        <DataTemplate>
-            <Grid BackgroundColor="{StaticResource Background}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.8*" />
-                    <ColumnDefinition Width="0.2*" />
-                </Grid.ColumnDefinitions>
-                <Label Text="{Binding Title}"
-                       Style="{StaticResource MenuItemStyle}"/>
-                <Image  Grid.Column="1"
-                        Source="{Binding FlyoutIcon}"
-                        Margin="5"/>
-            </Grid>
-        </DataTemplate>
-    </Shell.ItemTemplate>
+    <ShellItem Route="login" >
+        <ShellContent ContentTemplate="{DataTemplate views:LoginView}">
+        </ShellContent>
+    </ShellItem>
     
-    <Shell.MenuItemTemplate>
-        <DataTemplate>
-            <Grid BackgroundColor="{StaticResource Background}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.8*" />
-                    <ColumnDefinition Width="0.2*" />
-                </Grid.ColumnDefinitions>
-                <Label Text="{Binding Title}"
-                       Style="{StaticResource MenuItemStyle}"/>
-                <Image  Grid.Column="1"
-                        Source="{Binding FlyoutIcon}"
-                        Margin="5"/>
-            </Grid>
-        </DataTemplate>
-    </Shell.MenuItemTemplate>
+    <ShellItem Route="register" >
+        <ShellContent ContentTemplate="{DataTemplate views:RegisterView}">
+        </ShellContent>
+    </ShellItem>
     
-    <FlyoutItem Title="Animals"
-                FlyoutDisplayOptions="AsMultipleItems">
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent Title="Notes"
                       Icon="note_icon.png"
                       ContentTemplate="{DataTemplate views:NotesView}" />

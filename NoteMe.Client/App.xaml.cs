@@ -110,16 +110,18 @@ namespace NoteMe.Client
         {
             var navigationService = Container.Resolve<INavigationService>();
             ApiWebSettings = Container.Resolve<ApiWebSettings>();
+            
 
             IsLogged = ApiWebSettings.JwtDto == null;
-
+            
+            Current.MainPage = new AppShell();
+                
             if (!IsLogged)
             {
-                MainPage = new LoginView();
+                navigationService.NavigateAsync("//login");
             }
             else
             {
-                MainPage = new AppShell();
                 navigationService.NavigateAsync("//main");
                 InitializeTimer();
             }
