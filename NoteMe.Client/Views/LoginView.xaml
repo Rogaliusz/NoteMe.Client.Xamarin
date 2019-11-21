@@ -31,8 +31,9 @@
             
             <StackLayout Grid.Row="1" VerticalOptions="CenterAndExpand">
                 <ActivityIndicator IsRunning="{Binding IsBusy}"></ActivityIndicator>
-                <Entry Placeholder="Login" Text="{Binding Email}"></Entry>
+                <Entry Placeholder="Email" Text="{Binding Email}"></Entry>
                 <Entry Placeholder="Password" IsPassword="True" Text="{Binding Password}" ></Entry>
+                <Label Style="{StaticResource ErrorLabelStyle}" Text="{Binding Error}" ></Label>
             </StackLayout>
             
             <StackLayout Grid.Row="2">

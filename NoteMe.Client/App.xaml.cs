@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation;
 using N.Publisher;
 using NoteMe.Client.Domain;
 using NoteMe.Client.Domain.Synchronization.Handlers;
@@ -69,12 +70,13 @@ namespace NoteMe.Client
             RegisterAll(typeof(ISynchronizationHandler));
             RegisterAll(typeof(ICommandHandler));
             RegisterAll(typeof(IQueryHandler));
+            RegisterAll(typeof(IValidator));
         }
 
         private void RegisterAll(Type type)
         {
-            var types = typeof(App).Assembly
-                .GetTypes()
+            var types = new [] {typeof(App).Assembly, typeof(IValidator).Assembly}
+                .SelectMany(x => x.GetTypes())
                 .Where( x => type.IsAssignableFrom(x));
 
             foreach (var impType in types.Where(x => !x.IsAbstract))

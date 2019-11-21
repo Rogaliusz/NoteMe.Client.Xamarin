@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using NoteMe.Client.Views;
+using NoteMe.Common.Domain.Users.Commands;
 using Xamarin.Forms;
 
 namespace NoteMe.Client.ViewModels
@@ -15,19 +16,19 @@ namespace NoteMe.Client.ViewModels
         public string Email
         {
             get => _email;
-            set => SetProperty(ref _email, value);
+            set => SetPropertyAndValidate(ref _email, value);
         }
 
         public string Password
         {
             get => _password;
-            set => SetProperty(ref _password, value);
+            set => SetPropertyAndValidate(ref _password, value);
         }
         
         public string ConfirmPassword
         {
             get => _confirmPassword;
-            set => SetProperty(ref _confirmPassword, value);
+            set => SetPropertyAndValidate(ref _confirmPassword, value);
         }
         
         public ICommand RegisterCommand { get; set; }
@@ -35,16 +36,24 @@ namespace NoteMe.Client.ViewModels
 
         public RegisterViewModel(IViewModelFacade viewModelFacade) : base(viewModelFacade)
         {
-            RegisterCommand = new Command(async () => await RegisterAsync());
+            RegisterCommand = new Command(async () => await RegisterAsync(), Validate);
             GoToLoginCommand = new Command(execute: async () => await GoToLoginAsync());
         }
 
         private async Task RegisterAsync()
         {
-            Console.WriteLine("sss");
+            var command = MapTo<UserRegisterCommand>(this);
+            await DispatchCommandAsync(command).ConfigureAwait(false);
         }
 
         private Task GoToLoginAsync()
             => NavigateTo("//login");
+
+        protected override void IsValidChanged()
+        {
+            base.IsValidChanged();
+            
+            ((Command)RegisterCommand).ChangeCanExecute();
+        }
     }
 }

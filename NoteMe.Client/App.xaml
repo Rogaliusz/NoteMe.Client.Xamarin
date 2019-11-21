@@ -13,6 +13,7 @@
         <Color x:Key="Accent">#B0DBB9</Color>
         <Color x:Key="Background">#574E4E</Color>
         <Color x:Key="BackgroundTabs">#43BAB8</Color>
+        <Color x:Key="Error">#EAF2CC</Color>
             
         <Style x:Key="NoteMeHeaderStyle" TargetType="Label">
             <Setter Property="TextColor" Value="{StaticResource Primary}"></Setter>
@@ -36,6 +37,14 @@
         
         <Style TargetType="Label">
             <Setter Property="TextColor" Value="{StaticResource Primary}"></Setter>
+        </Style>
+        
+        <Style x:Key="ErrorLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource Error}"></Setter>
+            <Setter Property="FontSize" Value="14"></Setter>
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="HorizontalOptions" Value="EndAndExpand"></Setter>
+            <Setter Property="VerticalOptions" Value="CenterAndExpand"></Setter>
         </Style>
         
         <Style TargetType="Label" x:Key="MenuItemStyle">

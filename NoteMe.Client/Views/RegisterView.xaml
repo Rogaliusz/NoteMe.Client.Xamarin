@@ -32,6 +32,7 @@
                 <Entry Placeholder="Email" Text="{Binding Email}" ></Entry>
                 <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True"></Entry>
                 <Entry Placeholder="Repeat password" Text="{Binding ConfirmPassword}" IsPassword="True"></Entry>
+                <Label Style="{StaticResource ErrorLabelStyle}" Text="{Binding Error}"></Label>
             </StackLayout>
             
             <StackLayout Grid.Row="2">
