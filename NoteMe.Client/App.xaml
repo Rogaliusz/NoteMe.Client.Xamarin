@@ -18,8 +18,8 @@
         <Style x:Key="NoteMeHeaderStyle" TargetType="Label">
             <Setter Property="TextColor" Value="{StaticResource Primary}"></Setter>
             <Setter Property="FontSize" Value="53"></Setter>
-            <Setter Property="HorizontalOptions" Value="Center"></Setter>
-            <Setter Property="VerticalOptions" Value="Center"></Setter>
+            <Setter Property="HorizontalOptions" Value="CenterAndExpand"></Setter>
+            <Setter Property="VerticalOptions" Value="CenterAndExpand"></Setter>
         </Style>
             
         <Style TargetType="Entry">

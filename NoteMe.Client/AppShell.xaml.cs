@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using N.Publisher;
 using NoteMe.Client.Domain.Users.Messages;
+using NoteMe.Client.Views;
 using Xamarin.Forms;
 
 namespace NoteMe.Client
@@ -10,9 +11,13 @@ namespace NoteMe.Client
     {
         public AppShell()
         {
+            Routing.RegisterRoute("login", typeof(LoginView));
+            Routing.RegisterRoute("register", typeof(RegisterView));
+
             InitializeComponent();
-            
+
             SetTabBarIsVisible(this, false);
+            
         }
 
         private void AppShell_OnNavigated(object sender, ShellNavigatedEventArgs e)

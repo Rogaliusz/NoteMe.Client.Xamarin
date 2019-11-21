@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using NoteMe.Client.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -30,21 +31,27 @@ namespace NoteMe.Client.Framework
         }
 
         private static async Task InternalNavigateAsync(string route)
-        {
-            Shell.Current.FlyoutIsPresented = !(route.Contains("login") || route.Contains("register"));
-            
-            if (!Shell.Current.FlyoutIsPresented)
+        {            
+            if (route.Contains("login"))
             {
-                Shell.Current.FlyoutBehavior = FlyoutBehavior.Disabled;
-                Shell.Current.IsTabStop = false;
-            }
-            else
+                Application.Current.MainPage = new LoginView();
+            } 
+            else if (route.Contains("register"))
             {
-                Shell.Current.FlyoutBehavior = FlyoutBehavior.Flyout;
-                Shell.Current.IsTabStop = true;
-            }
+                Application.Current.MainPage = new RegisterView();
+            } 
+            else 
+            {
+                if (Application.Current.MainPage.GetType() != typeof(AppShell))
+                {
+                    Application.Current.MainPage = new AppShell();
+                }
 
-            await Shell.Current.GoToAsync(route);
+                await Shell.Current.GoToAsync(route);
+            }
+            
+
+
         }
     }
 }

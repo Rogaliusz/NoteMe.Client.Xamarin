@@ -124,7 +124,7 @@ namespace NoteMe.Client
             }
             else
             {
-                navigationService.NavigateAsync("//main");
+                navigationService.NavigateAsync("//notes");
                 InitializeTimer();
             }
         }

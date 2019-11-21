@@ -15,7 +15,6 @@
        >
     <Shell.Resources>
         <ResourceDictionary>
-            
             <Style TargetType="Element">
                 <Setter Property="Shell.Opacity" Value="0.37"></Setter>
                 <Setter Property="Shell.BackgroundColor" Value="{StaticResource BackgroundTabs}"></Setter>
@@ -33,40 +32,48 @@
                          VerticalOptions="CenterAndExpand">
                 <Label Style="{StaticResource NoteMeHeaderStyle}" 
                        Text="Welcome Janusz"
-                       VerticalOptions="CenterAndExpand"
-                       HorizontalOptions="CenterAndExpand">
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center">
                 </Label>
             </StackLayout>
         </DataTemplate>
     </Shell.FlyoutHeaderTemplate>
     
-    <ShellItem Route="main" >
-        <ShellContent ContentTemplate="{DataTemplate views:NotesView}">
-        </ShellContent>
-    </ShellItem>
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid x:Name="ItemGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*" />
+                    <ColumnDefinition Width="0.8*" />
+                </Grid.ColumnDefinitions>
+                <Image Source="{Binding Icon}"
+                       HeightRequest="24"
+                       VerticalOptions="CenterAndExpand"
+                       HorizontalOptions="CenterAndExpand"
+                       />
+                <Label Grid.Column="1"
+                       Text="{Binding Title}"
+                       FontSize="14"
+                       VerticalTextAlignment="Center"
+                       FontAttributes="Bold">
+                </Label>
+               <-- https://forums.xamarin.com/discussion/171035/flyoutitem-menu-how-can-i-set-label-text-color-white-in-grid-when-selected-shellitem -->
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
     
-    <ShellItem Route="login" >
-        <ShellContent ContentTemplate="{DataTemplate views:LoginView}">
-        </ShellContent>
-    </ShellItem>
+    <ShellContent Title="Notes"
+                  Route="notes" 
+                  Icon="note_icon.png"
+                  ContentTemplate="{DataTemplate views:NotesView}" />
     
-    <ShellItem Route="register" >
-        <ShellContent ContentTemplate="{DataTemplate views:RegisterView}">
-        </ShellContent>
-    </ShellItem>
+    <ShellContent Title="Create note"
+                  Route="create"
+                  Icon="add_icon.png"
+                  ContentTemplate="{DataTemplate views:CreateNoteView}" />  
     
-    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
-        <ShellContent Title="Notes"
-                      Icon="note_icon.png"
-                      ContentTemplate="{DataTemplate views:NotesView}" />
-        <ShellContent Title="Create note"
-                      Icon="add_icon.png"
-                      ContentTemplate="{DataTemplate views:CreateNoteView}" />  
-    </FlyoutItem>
-    
-    <MenuItem x:Name="LogoutMenuItem"
-              Text="Logout"
-              IconImageSource="logout_icon.png"
-              Clicked="LogoutMenuItem_OnClicked" />
-    
+    <ShellContent Title="Logout"
+                  Route="logout"
+                  Icon="logout_icon.png"
+                  ContentTemplate="{DataTemplate views:LogoutView}" />  
 </Shell>

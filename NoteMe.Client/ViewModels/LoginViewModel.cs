@@ -45,7 +45,7 @@ namespace NoteMe.Client.ViewModels
                 await DispatchCommandAsync(command)
                     .ConfigureAwait(false);
 
-                await NavigateTo("//main");
+                await NavigateTo("//notes");
             }
             catch (UnauthorizedAccessException)
             {
