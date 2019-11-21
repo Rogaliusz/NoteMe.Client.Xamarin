@@ -6,14 +6,14 @@ namespace NoteMe.Client.Domain.Notes.Messages
 {
     public class NewNotesMessage : NMessage
     {
-        public ICollection<NoteDto> Notes { get; set; }
+        public ICollection<Note> Notes { get; set; }
 
         public NewNotesMessage()
         {
             
         }
         
-        public NewNotesMessage(ICollection<NoteDto> notes)
+        public NewNotesMessage(ICollection<Note> notes)
         {
             Notes = notes;
         }

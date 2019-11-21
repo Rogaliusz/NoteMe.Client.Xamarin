@@ -111,6 +111,7 @@
     </ImageAsset>
     <BundleResource Include="Resources\add_icon.png" />
     <BundleResource Include="Resources\logged_background.png" />
+    <BundleResource Include="Resources\logout_icon.png" />
     <BundleResource Include="Resources\note_icon.png" />
     <BundleResource Include="Resources\tab_about.png" />
     <BundleResource Include="Resources\tab_about%402x.png" />

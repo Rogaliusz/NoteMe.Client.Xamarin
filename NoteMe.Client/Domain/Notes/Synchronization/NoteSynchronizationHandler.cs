@@ -16,9 +16,9 @@ using NoteMe.Common.Domain.Notes.Commands;
 using NoteMe.Common.Domain.Notes.Dto;
 using NoteMe.Common.Domain.Notes.Queries;
 using NoteMe.Common.Domain.Pagination;
-using N.Pag.Queries;
 using N.Publisher;
 using NoteMe.Client.Domain.Notes.Messages;
+using NoteMe.Common.DataTypes.Enums;
 
 namespace NoteMe.Client.Domain.Notes.Synchronization
 {
@@ -47,12 +47,12 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
 
             var syncDate = synchronization.LastSynchronization;
             var hasMore = false;
-            var allNotes = new List<NoteDto>();
+            var allNotes = new List<Note>();
 
             do
             {
                 var filterBy = $@"{nameof(Note.CreatedAt)} > ""{syncDate}""";
-                var orderBy = $"{nameof(Note.CreatedAt)}";
+                var orderBy = $"{nameof(Note.CreatedAt)}-desc";
                 var query = new GetNotesQuery()
                     .SetNormalWhere(filterBy)
                     .SetNormalOrderBy(orderBy);
@@ -65,10 +65,8 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
                     return;
                 }
                 
-                allNotes.AddRange(notes.Data);
 
                 hasMore = notes.Data.Count == query.PageSize;
-                syncDate = notes.Data.Max(x => x.CreatedAt);
 
                 foreach (var noteDto in notes.Data)
                 {
@@ -77,13 +75,13 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
                     if (note != null) continue;
 
                     note = _mapper.MapTo<Note>(noteDto);
-                    await context.AddRangeAsync(note);
 
-                    foreach (var historical in noteDto.OldNotes)
+                    if (note.Status == StatusEnum.Normal)
                     {
-                        var history = await context.Notes.AsTracking().FirstOrDefaultAsync(x => x.Id == historical.Id, cts);
-                        history.ActualNoteId = note.Id;
+                        allNotes.Add(note);
                     }
+
+                    await context.AddRangeAsync(note);
                 }
             } while (hasMore);
 

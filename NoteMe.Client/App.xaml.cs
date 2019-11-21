@@ -94,7 +94,7 @@ namespace NoteMe.Client
                 InitializeTimer();
             });
             
-            _unloggedSubscription = NPublisher.SubscribeIt<UnloggedMessage>(async message =>
+            _unloggedSubscription = NPublisher.SubscribeIt<LogoutMessage>(async message =>
             {
                 SynchronizationTimerTokenSource.Cancel(true);
                 SynchronizationTimer.Stop();

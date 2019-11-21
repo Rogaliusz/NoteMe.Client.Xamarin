@@ -15,8 +15,9 @@ namespace NoteMe.Client.Domain.Users
 {
     public class UserCommandHandler : 
         ICommandHandler<UserRegisterCommand>,
-        ICommandHandler<LoginCommand>
-        
+        ICommandHandler<LoginCommand>,
+        ICommandHandler<LogoutUserCommand>
+
     {
         private readonly INoteMeClientMapper _mapper;
         private readonly ApiWebSettings _apiWebSettings;
@@ -46,6 +47,11 @@ namespace NoteMe.Client.Domain.Users
             _apiWebSettings.JwtDto = result;
 
             NPublisher.PublishIt<LoggedMessage>();
+        }
+
+        public async Task HandleAsync(LogoutUserCommand command)
+        {
+            NPublisher.PublishIt<LogoutMessage>();
         }
     }
 }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +11,12 @@ using NoteMe.Common.Domain.Notes.Dto;
 using NoteMe.Common.Domain.Notes.Queries;
 using NoteMe.Common.Domain.Pagination;
 using N.Pag.Extensions;
+using NoteMe.Client.Domain.Notes.Queries;
+using NoteMe.Common.DataTypes.Enums;
 
 namespace NoteMe.Client.Domain.Notes
 {
-    public class NoteQueryHandler : IQueryHandler<GetNotesQuery, PaginationDto<NoteDto>>
+    public class NoteQueryHandler : IQueryHandler<GetActiveNotesQuery, ICollection<Note>>
     {
         private readonly INoteMeClientMapper _mapper;
         private readonly NoteMeSqlLiteContext _noteMeSqlLiteContext;
@@ -24,20 +28,17 @@ namespace NoteMe.Client.Domain.Notes
             _mapper = mapper;
             _noteMeSqlLiteContext = noteMeSqlLiteContext;
         }
-
-        public async Task<PaginationDto<NoteDto>> HandleAsync(GetNotesQuery query)
+        
+        public async Task<ICollection<Note>> HandleAsync(GetActiveNotesQuery query)
         {
-            var queryable = _noteMeSqlLiteContext.Notes.FilterBy(query);
-            var count = await queryable.CountAsync();
-            var data = await queryable.TransformBy(query).ToListAsync();
+            var list = await _noteMeSqlLiteContext.Notes
+                .Where(x => x.Status == StatusEnum.Normal)
+                .OrderBy(x => x.CreatedAt)
+                .Skip(query.Page * query.PageSize)
+                .Take(query.PageSize)
+                .ToListAsync();
 
-            var paginationDto = new PaginationDto<Note>
-            {
-                TotalCount = count,
-                Data = data
-            };
-
-            return _mapper.MapTo<PaginationDto<NoteDto>>(paginationDto);
+            return _mapper.MapTo<ICollection<Note>>(list);
         }
     }
 }

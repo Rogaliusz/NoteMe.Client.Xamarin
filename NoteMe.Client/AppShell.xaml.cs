@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using N.Publisher;
+using NoteMe.Client.Domain.Users.Messages;
 using Xamarin.Forms;
 
 namespace NoteMe.Client
@@ -17,6 +18,11 @@ namespace NoteMe.Client
         private void AppShell_OnNavigated(object sender, ShellNavigatedEventArgs e)
         {
             Console.WriteLine("sss");
+        }
+
+        private void LogoutMenuItem_OnClicked(object sender, EventArgs e)
+        {
+            NPublisher.PublishIt<LogoutMessage>();
         }
     }
 }

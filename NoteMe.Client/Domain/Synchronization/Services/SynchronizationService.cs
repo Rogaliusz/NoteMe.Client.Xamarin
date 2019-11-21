@@ -20,6 +20,7 @@ namespace NoteMe.Client.Domain.Synchronization.Services
     
     public class SynchronizationService : ISynchronizationService
     {
+        private static readonly SemaphoreSlim _synchronizationSemaphore = new SemaphoreSlim(1);
         private readonly ISynchronizationDispatcher _dispatcher;
         private readonly TinyIoCContainer _container;
 
@@ -33,28 +34,37 @@ namespace NoteMe.Client.Domain.Synchronization.Services
         
         public async Task SynchronizeAsync(CancellationToken cts)
         {
-            var current = Connectivity.NetworkAccess;
+            await _synchronizationSemaphore.WaitAsync(cts);
 
-            if (current != NetworkAccess.Internet)
+            try
             {
-                return;
-            }
+                var current = Connectivity.NetworkAccess;
 
-            using (var dbContext = new NoteMeSqlLiteContext(_container.Resolve<SqliteSettings>()))
-            {
-                var existed = await dbContext.Synchronizations.ToListAsync(cts);
-                var toInsert = GetDefaultSynchronizations().Where(x => !existed.Any(e => e.Type == x.Type));
-                await dbContext.Synchronizations.AddRangeAsync(toInsert, cts);
-                var lastSyncs = await dbContext.Synchronizations.AsTracking().ToListAsync(cts);
-
-                foreach (var x in lastSyncs)
+                if (current != NetworkAccess.Internet)
                 {
-                    await SynchronizeAsync(x, dbContext, cts);
+                    return;
                 }
 
-                await dbContext.SaveChangesAsync(cts);
+                using (var dbContext = new NoteMeSqlLiteContext(_container.Resolve<SqliteSettings>()))
+                {
+                    var existed = await dbContext.Synchronizations.ToListAsync(cts);
+                    var toInsert = GetDefaultSynchronizations().Where(x => !existed.Any(e => e.Type == x.Type));
+                    await dbContext.Synchronizations.AddRangeAsync(toInsert, cts);
+                    var lastSyncs = await dbContext.Synchronizations.AsTracking().ToListAsync(cts);
+
+                    foreach (var x in lastSyncs)
+                    {
+                        await SynchronizeAsync(x, dbContext, cts);
+                    }
+
+                    await dbContext.SaveChangesAsync(cts);
+                }
             }
-            
+            finally
+            {
+                _synchronizationSemaphore.Release();
+            }
+
         }
 
         private ICollection<Synchronization> GetDefaultSynchronizations()

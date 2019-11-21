@@ -1,10 +1,12 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using N.Publisher;
+using NoteMe.Client.Domain.Notes;
 using NoteMe.Client.Domain.Notes.Messages;
-using NoteMe.Common.Domain.Notes.Dto;
-using NoteMe.Common.Domain.Notes.Queries;
-using NoteMe.Common.Domain.Pagination;
+using NoteMe.Client.Domain.Notes.Queries;
+using NoteMe.Common.DataTypes.Enums;
 using Xamarin.Essentials;
 
 namespace NoteMe.Client.ViewModels
@@ -12,7 +14,7 @@ namespace NoteMe.Client.ViewModels
     public class NoteViewModel : ViewModelBase
     {
         private readonly NSubscription _newNotesSubscription;
-        public ObservableCollection<NoteDto> Notes { get; set; } = new ObservableCollection<NoteDto>();
+        public ObservableCollection<Note> Notes { get; set; } = new ObservableCollection<Note>();
         
         protected NoteViewModel(IViewModelFacade viewModelFacade) : base(viewModelFacade)
         {
@@ -20,7 +22,7 @@ namespace NoteMe.Client.ViewModels
             {
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    foreach (var note in message.Notes)
+                    foreach (var note in message.Notes.Where(x => x.Status == StatusEnum.Normal))
                     {
                         Notes.Add(note);
                     }
@@ -32,10 +34,10 @@ namespace NoteMe.Client.ViewModels
         {
             await base.InitializeAsync(parameter);
             
-            var query = new GetNotesQuery();
-            var notes = await DispatchQueryAsync<GetNotesQuery, PaginationDto<NoteDto>>(query);
+            var query = new GetActiveNotesQuery();
+            var notes = await DispatchQueryAsync<GetActiveNotesQuery, ICollection<Note>>(query);
 
-            foreach (var note in notes.Data)
+            foreach (var note in notes)
             {
                 Notes.Add(note);
             }
