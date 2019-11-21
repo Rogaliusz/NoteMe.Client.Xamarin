@@ -27,9 +27,5 @@ namespace NoteMe.Client.Views
         private void ItemsView_OnScrollToRequested(object sender, ScrollToRequestEventArgs e)
         {
         }
-
-        private void ItemsView_OnScrolled(object sender, ItemsViewScrolledEventArgs e)
-        {
-        }
     }
 }

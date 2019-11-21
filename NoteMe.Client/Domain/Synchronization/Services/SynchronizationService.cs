@@ -66,12 +66,6 @@ namespace NoteMe.Client.Domain.Synchronization.Services
                     Id = Guid.NewGuid(),
                     Type = typeof(Note).FullName,
                     Order = 0
-                },
-                new Synchronization
-                {
-                    Id = Guid.NewGuid(),
-                    Type = typeof(Attachment).FullName,
-                    Order = 1
                 }
             };
         }

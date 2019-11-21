@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
+using N.Publisher;
 using NoteMe.Client.Domain;
+using NoteMe.Client.Domain.Synchronization.Handlers;
 using NoteMe.Client.Domain.Synchronization.Services;
+using NoteMe.Client.Domain.Users.Messages;
 using NoteMe.Client.Framework;
 using NoteMe.Client.Framework.Cqrs;
 using NoteMe.Client.Framework.Mappers;
@@ -20,6 +24,9 @@ namespace NoteMe.Client
 {
     public partial class App : Application
     {
+        private NSubscription _loggedSubscription;
+        private NSubscription _unloggedSubscription;
+        
         public CancellationTokenSource SynchronizationTimerTokenSource { get; private set; }
         public Timer SynchronizationTimer { get; private set; }
         public TinyIoCContainer Container { get; private set; }
@@ -59,14 +66,15 @@ namespace NoteMe.Client
             var mapper = NoteMeMapperConfiguration.Create();
             Container.Register<IMapper>(mapper);
             
+            RegisterAll(typeof(ISynchronizationHandler));
             RegisterAll(typeof(ICommandHandler));
             RegisterAll(typeof(IQueryHandler));
         }
 
         private void RegisterAll(Type type)
         {
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(x => x.GetTypes())
+            var types = typeof(App).Assembly
+                .GetTypes()
                 .Where( x => type.IsAssignableFrom(x));
 
             foreach (var impType in types.Where(x => !x.IsAbstract))
@@ -81,12 +89,12 @@ namespace NoteMe.Client
         
         private void InitializeSubscriptions()
         {
-            MessagingCenter.Subscribe<object, object>(this, Messages.Logged, (sender, args) =>
+            _loggedSubscription = NPublisher.SubscribeIt<LoggedMessage>(message =>
             {
                 InitializeTimer();
             });
             
-            MessagingCenter.Subscribe<object, object>(this, Messages.Logout, async (sender, args) =>
+            _unloggedSubscription = NPublisher.SubscribeIt<UnloggedMessage>(async message =>
             {
                 SynchronizationTimerTokenSource.Cancel(true);
                 SynchronizationTimer.Stop();
@@ -116,20 +124,23 @@ namespace NoteMe.Client
                 InitializeTimer();
             }
         }
-        
+
         private void InitializeTimer()
         {
             SynchronizationTimerTokenSource = new CancellationTokenSource();
-            
+
             SynchronizationTimer = new Timer {Interval = 1000 * 60};
-            SynchronizationTimer.Elapsed += async (sender, args) =>
-            {
-                var syncService = Container.Resolve<ISynchronizationService>();
-                await syncService.SynchronizeAsync(SynchronizationTimerTokenSource.Token);
-            };
-            
+            SynchronizationTimer.Elapsed += async (sender, args) => { await SynchronizeAsync().ConfigureAwait(false); };
+
             SynchronizationTimer.Start();
+
+            SynchronizeAsync();
         }
-        
+
+        private async Task SynchronizeAsync()
+        {
+            var syncService = Container.Resolve<ISynchronizationService>();
+            await syncService.SynchronizeAsync(SynchronizationTimerTokenSource.Token);
+        }
     }
 }

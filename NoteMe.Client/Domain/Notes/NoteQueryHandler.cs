@@ -8,7 +8,7 @@ using NoteMe.Common.DataTypes;
 using NoteMe.Common.Domain.Notes.Dto;
 using NoteMe.Common.Domain.Notes.Queries;
 using NoteMe.Common.Domain.Pagination;
-using NPag.Extensions;
+using N.Pag.Extensions;
 
 namespace NoteMe.Client.Domain.Notes
 {

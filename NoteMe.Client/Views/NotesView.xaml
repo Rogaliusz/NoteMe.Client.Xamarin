@@ -13,7 +13,7 @@
                    RelativeLayout.HeightConstraint=
                    "{ConstraintExpression Type=RelativeToParent, Property=Height}"/>
             <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-                <CollectionView ItemsSource="{Binding Notes}" Scrolled="ItemsView_OnScrolled" ScrollToRequested="ItemsView_OnScrollToRequested">
+                <CollectionView ItemsSource="{Binding Notes}"  ScrollToRequested="ItemsView_OnScrollToRequested">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <StackLayout Margin="10" >

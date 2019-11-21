@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Xsl;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using NoteMe.Client.Domain.Synchronization.Handlers;
 using NoteMe.Client.Framework.Mappers;
 using NoteMe.Client.Sql;
@@ -15,7 +16,9 @@ using NoteMe.Common.Domain.Notes.Commands;
 using NoteMe.Common.Domain.Notes.Dto;
 using NoteMe.Common.Domain.Notes.Queries;
 using NoteMe.Common.Domain.Pagination;
-using NPag.Queries;
+using N.Pag.Queries;
+using N.Publisher;
+using NoteMe.Client.Domain.Notes.Messages;
 
 namespace NoteMe.Client.Domain.Notes.Synchronization
 {
@@ -44,10 +47,11 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
 
             var syncDate = synchronization.LastSynchronization;
             var hasMore = false;
+            var allNotes = new List<NoteDto>();
 
             do
             {
-                var filterBy = $"{nameof(Note.CreatedAt)} > {syncDate}";
+                var filterBy = $@"{nameof(Note.CreatedAt)} > ""{syncDate}""";
                 var orderBy = $"{nameof(Note.CreatedAt)}";
                 var query = new GetNotesQuery()
                     .SetNormalWhere(filterBy)
@@ -55,6 +59,13 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
 
                 var notes = await _webService.SendAsync<PaginationDto<NoteDto>>(HttpMethod.Get,
                     Endpoints.Notes._ + query.ToUri());
+
+                if (!notes.Data.Any() && !allNotes.Any())
+                {
+                    return;
+                }
+                
+                allNotes.AddRange(notes.Data);
 
                 hasMore = notes.Data.Count == query.PageSize;
                 syncDate = notes.Data.Max(x => x.CreatedAt);
@@ -77,6 +88,8 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
             } while (hasMore);
 
             await context.SaveChangesAsync(cts);
+            
+            NPublisher.PublishIt(new NewNotesMessage(allNotes));
         }
         
         private async Task SendAllNotesAsync(NoteMeSqlLiteContext context, CancellationToken cts)

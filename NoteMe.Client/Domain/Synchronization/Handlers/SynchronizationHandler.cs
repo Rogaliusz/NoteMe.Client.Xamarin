@@ -5,7 +5,12 @@ using NoteMe.Common.Providers;
 
 namespace NoteMe.Client.Domain.Synchronization.Handlers
 {
-    public interface ISynchronizationHandler<TEntity>
+    public interface ISynchronizationHandler
+    {
+
+    }
+
+    public interface ISynchronizationHandler<TEntity> : ISynchronizationHandler
         where TEntity : IIdProvider, ISynchronizationProvider
     {
         Task HandleAsync(Synchronization synchronization, NoteMeSqlLiteContext context, CancellationToken cts);

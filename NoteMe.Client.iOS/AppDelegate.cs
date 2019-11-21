@@ -24,7 +24,9 @@ namespace NoteMe.Client.iOS
         // You have 17 seconds to return from this method, or iOS will terminate your application.
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
-        {            
+        {
+            SQLitePCL.Batteries_V2.Init();
+
             global::Xamarin.Forms.Forms.SetFlags("CollectionView_Experimental");
             global::Xamarin.Forms.Forms.Init();
 
@@ -37,15 +39,15 @@ namespace NoteMe.Client.iOS
             {
                 Directory.CreateDirectory(libPath);
             }
-            
+
             var settings = new SqliteSettings
             {
                 Path = Path.Combine(libPath,
                     "database.sqlite")
             };
-            
+
             LoadApplication(new App());
-            
+
             TinyIoCContainer.Current.Register(settings);
 
             return base.FinishedLaunching(app, options);
