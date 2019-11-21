@@ -1,5 +1,6 @@
 using System.Data;
 using FluentValidation;
+using NoteMe.Client.Framework.Validation;
 using NoteMe.Client.ViewModels;
 
 namespace NoteMe.Client.Domain.Users.Validators
@@ -9,11 +10,11 @@ namespace NoteMe.Client.Domain.Users.Validators
         public LoginValidator()
         {
             RuleFor(x => x.Email)
-                .EmailAddress()
-                .NotEmpty();
+                .EmailAddress().WithMessage(ValidationCodes.IsNotValid)
+                .NotEmpty().WithMessage(ValidationCodes.MustBeNotEmpty);
 
             RuleFor(x => x.Password)
-                .NotEmpty();
+                .NotEmpty().WithMessage(ValidationCodes.MustBeNotEmpty);
         }
     }
 }

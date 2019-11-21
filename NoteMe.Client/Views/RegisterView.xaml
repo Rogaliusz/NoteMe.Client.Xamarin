@@ -3,6 +3,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:NoteMe.Client.ViewModels;assembly=NoteMe.Client"
+             xmlns:extensions="clr-namespace:NoteMe.Client.Framework.Extensions;assembly=NoteMe.Client"
              x:Class="NoteMe.Client.Views.RegisterView"
              BindingContext="{Binding RegisterViewModel, Source={StaticResource ViewModelLocator}}" >
     <RelativeLayout>
@@ -29,15 +30,15 @@
             </StackLayout>
             
             <StackLayout Grid.Row="1" VerticalOptions="CenterAndExpand">
-                <Entry Placeholder="Email" Text="{Binding Email}" ></Entry>
-                <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True"></Entry>
-                <Entry Placeholder="Repeat password" Text="{Binding ConfirmPassword}" IsPassword="True"></Entry>
+                <Entry Placeholder="{extensions:Translate Email}" Text="{Binding Email}" ></Entry>
+                <Entry Placeholder="{extensions:Translate Password}" Text="{Binding Password}" IsPassword="True"></Entry>
+                <Entry Placeholder="{extensions:Translate ConfirmPassword}" Text="{Binding ConfirmPassword}" IsPassword="True"></Entry>
                 <Label Style="{StaticResource ErrorLabelStyle}" Text="{Binding Error}"></Label>
             </StackLayout>
             
             <StackLayout Grid.Row="2">
-                <Button Text="Register" Command="{Binding RegisterCommand}"></Button>
-                <Button Text="Go to login" Command="{Binding GoToLoginCommand}"></Button>
+                <Button Text="{extensions:Translate Register}" Command="{Binding RegisterCommand}"></Button>
+                <Button Text="{extensions:Translate GoToLogin}" Command="{Binding GoToLoginCommand}"></Button>
             </StackLayout>
         </Grid>
     </RelativeLayout>

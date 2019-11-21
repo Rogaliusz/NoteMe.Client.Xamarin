@@ -4,6 +4,7 @@
        xmlns:d="http://xamarin.com/schemas/2014/forms/design" 
        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
        xmlns:views="clr-namespace:NoteMe.Client.Views;assembly=NoteMe.Client"
+       xmlns:extensions="clr-namespace:NoteMe.Client.Framework.Extensions;assembly=NoteMe.Client"
        x:Class="NoteMe.Client.AppShell"
        mc:Ignorable="d" 
        BackgroundColor="#43BAB8"
@@ -57,22 +58,23 @@
                        VerticalTextAlignment="Center"
                        FontAttributes="Bold">
                 </Label>
-               <-- https://forums.xamarin.com/discussion/171035/flyoutitem-menu-how-can-i-set-label-text-color-white-in-grid-when-selected-shellitem -->
+               <!-- https://forums.xamarin.com/discussion/171035/flyoutitem-menu-how-can-i-set-label-text-color-white-in-grid-when-selected-shellitem -->
+                
             </Grid>
         </DataTemplate>
     </Shell.ItemTemplate>
     
-    <ShellContent Title="Notes"
+    <ShellContent Title="{extensions:Translate Notes}"
                   Route="notes" 
                   Icon="note_icon.png"
                   ContentTemplate="{DataTemplate views:NotesView}" />
     
-    <ShellContent Title="Create note"
+    <ShellContent Title="{extensions:Translate NoteCreate}"
                   Route="create"
                   Icon="add_icon.png"
                   ContentTemplate="{DataTemplate views:CreateNoteView}" />  
     
-    <ShellContent Title="Logout"
+    <ShellContent Title="{extensions:Translate Logout}"
                   Route="logout"
                   Icon="logout_icon.png"
                   ContentTemplate="{DataTemplate views:LogoutView}" />  

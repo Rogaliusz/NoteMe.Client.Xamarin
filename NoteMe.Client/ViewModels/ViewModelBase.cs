@@ -14,6 +14,7 @@ namespace NoteMe.Client.ViewModels
     {
         private readonly IViewModelFacade _viewModelFacade;
 
+        private string _lastValidationErrorMessage = "";
         private IValidator _validator;
         
         private bool _isBusy = false;
@@ -92,6 +93,39 @@ namespace NoteMe.Client.ViewModels
         {
             
         }
+        
+        protected virtual bool Validate()
+        {
+            if (_validator == null)
+            {
+                _validator = _viewModelFacade.ValidationDispatcher.GetValidator(this.GetType());
+            }
+
+            var validationResult = _validator.ValidateAsync(this);
+            var error = validationResult.Result.Errors.FirstOrDefault();
+            
+            if (error == null)
+            {
+                Error = string.Empty;
+                return IsValid = true;
+            }
+
+            if (_lastValidationErrorMessage == error.ErrorMessage)
+            {
+                return IsValid;
+            }
+
+            _lastValidationErrorMessage = error.ErrorMessage;
+
+            var translatedObjects = error.FormattedMessagePlaceholderValues
+                .Where(x => x.Key == "PropertyName")
+                .Select(x => (object) Translate(x.Value.ToString()));
+            
+            Error = string.Format(Translate(error.ErrorMessage), translatedObjects.ToArray());
+            IsValid = string.IsNullOrEmpty(Error);
+
+            return IsValid;
+        }
 
         protected Task ShowDialogAsync(string title, string content, string cancel = "Cancel")
             => _viewModelFacade.DialogService.ShowDialogAsync(title, content, cancel);
@@ -102,20 +136,9 @@ namespace NoteMe.Client.ViewModels
         protected Task NavigateTo(string route)
             => _viewModelFacade.NavigationService.NavigateAsync(route);
 
-        protected bool Validate()
-        {
-            if (_validator == null)
-            {
-                _validator = _viewModelFacade.ValidationDispatcher.GetValidator(this.GetType());
-            }
-
-            var validationResult = _validator.ValidateAsync(this);
-
-            Error = validationResult.Result.Errors.FirstOrDefault()?.ErrorMessage;
-            IsValid = string.IsNullOrEmpty(Error);
-
-            return IsValid;
-        }
+        protected string Translate(string text)
+            => _viewModelFacade.TranslationService.Translate(text);
+        
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
