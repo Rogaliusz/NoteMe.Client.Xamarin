@@ -111,10 +111,9 @@ namespace NoteMe.Client
         private void InitializeStartPage()
         {
             var navigationService = Container.Resolve<INavigationService>();
-            ApiWebSettings = Container.Resolve<ApiWebSettings>();
             
-
-            IsLogged = ApiWebSettings.JwtDto == null;
+            ApiWebSettings = Container.Resolve<ApiWebSettings>();
+            IsLogged = ApiWebSettings.JwtDto != null;
             
             Current.MainPage = new AppShell();
                 

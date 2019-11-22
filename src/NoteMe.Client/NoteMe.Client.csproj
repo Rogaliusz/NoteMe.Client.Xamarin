@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\NPublisher\src\N.Publisher\N.Publisher.csproj" />
-    <ProjectReference Include="..\..\NoteMe.Common\src\NoteMe.Common\NoteMe.Common.csproj" />
+    <ProjectReference Include="..\..\..\..\NPublisher\src\N.Publisher\N.Publisher.csproj" />
+    <ProjectReference Include="..\..\..\NoteMe.Common\src\NoteMe.Common\NoteMe.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

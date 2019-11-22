@@ -20,7 +20,6 @@ namespace NoteMe.Client.Sql
             _settings = settings;
             
             Database.EnsureCreated();
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
