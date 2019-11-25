@@ -60,6 +60,10 @@ namespace NoteMe.Client.Domain.Synchronization.Services
                     await dbContext.SaveChangesAsync(cts);
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
             finally
             {
                 _synchronizationSemaphore.Release();

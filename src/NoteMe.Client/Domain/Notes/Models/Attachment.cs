@@ -9,6 +9,7 @@ namespace NoteMe.Client.Domain.Notes
         ICreatedAtProvider,
         ISynchronizationProvider
     {
+        public string Name { get; set; }
         public Guid Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? LastSynchronization { get; set; }

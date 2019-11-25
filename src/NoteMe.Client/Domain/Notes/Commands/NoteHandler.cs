@@ -11,7 +11,7 @@ using Xamarin.Essentials;
 
 namespace NoteMe.Client.Domain.Notes.Commands
 {
-    public class NoteHandler : ICommandHandler<CreateNoteCommand>
+    public class NoteHandler : ICommandHandler<CreateNoteInSqliteCommand>
     {
         private readonly NoteMeClientMapper _mapper;
         private readonly NoteMeSqlLiteContext _context;
@@ -24,7 +24,7 @@ namespace NoteMe.Client.Domain.Notes.Commands
             _context = context;
         }
         
-        public async Task HandleAsync(CreateNoteCommand command)
+        public async Task HandleAsync(CreateNoteInSqliteCommand command)
         {
             var note = _mapper.MapTo<Note>(command);
             note.Id = Guid.NewGuid();

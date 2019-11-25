@@ -43,6 +43,20 @@
                                  BackgroundColor="{StaticResource Background}" 
                                  VerticalOptions="FillAndExpand" 
                                  HorizontalOptions="FillAndExpand">
+                        <CarouselView ItemsSource="{Binding Attachments}"  >
+                            <CarouselView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout VerticalOptions="CenterAndExpand"
+                                        HorizontalOptions="CenterAndExpand" 
+                                        Margin="10">
+                                        <Label Style="{StaticResource ErrorLabelStyle}"
+                                               HorizontalTextAlignment="Center" 
+                                               VerticalTextAlignment="Center"
+                                               Text="{Binding Name}"></Label>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CarouselView.ItemTemplate>
+                        </CarouselView>
                     </StackLayout>
                     
                     <StackLayout Grid.Row="3" 
