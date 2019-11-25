@@ -109,17 +109,19 @@ namespace NoteMe.Client.ViewModels
                 Error = string.Empty;
                 return IsValid = true;
             }
-
-            if (_lastValidationErrorMessage == error.ErrorMessage)
-            {
-                return IsValid;
-            }
-
-            _lastValidationErrorMessage = error.ErrorMessage;
-
+            
             var translatedObjects = error.FormattedMessagePlaceholderValues
                 .Where(x => x.Key == "PropertyName")
                 .Select(x => (object) Translate(x.Value.ToString()));
+
+            var errorMessage = error.ErrorMessage + translatedObjects.FirstOrDefault();
+
+            if (_lastValidationErrorMessage == errorMessage)
+            { 
+                return IsValid;
+            }
+
+            _lastValidationErrorMessage = errorMessage;
             
             Error = string.Format(Translate(error.ErrorMessage), translatedObjects.ToArray());
             IsValid = string.IsNullOrEmpty(Error);

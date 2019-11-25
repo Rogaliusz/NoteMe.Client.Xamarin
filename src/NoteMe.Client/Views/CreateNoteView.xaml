@@ -13,7 +13,6 @@
                    "{ConstraintExpression Type=RelativeToParent, Property=Width}"
                    RelativeLayout.HeightConstraint=
                    "{ConstraintExpression Type=RelativeToParent, Property=Height}"/>
-            <ScrollView>
                 <Grid RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width}"
                       RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height}"
                       Margin="20"
@@ -58,7 +57,6 @@
                     </StackLayout>
 
                 </Grid>
-            </ScrollView>
         </RelativeLayout>
     </ContentPage.Content>
 </ContentPage>

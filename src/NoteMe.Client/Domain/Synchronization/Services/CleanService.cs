@@ -5,24 +5,30 @@ namespace NoteMe.Client.Domain.Synchronization.Services
 {
     public interface ICleanService
     {
-        Task CleanAsync();
+        void Clean();
     }
 
     public class CleanService : ICleanService
     {
+        private readonly ApiWebSettings _apiWebSettings;
         private readonly NoteMeSqlLiteContext _context;
 
-        public CleanService(NoteMeSqlLiteContext context)
+        public CleanService(
+            ApiWebSettings apiWebSettings,
+            NoteMeSqlLiteContext context)
         {
+            _apiWebSettings = apiWebSettings;
             _context = context;
         }
-        public async Task CleanAsync()
+        public void Clean()
         {
             _context.RemoveRange(_context.Synchronizations);
             _context.RemoveRange(_context.Attachments);
             _context.RemoveRange(_context.Notes);
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
+
+            _apiWebSettings.JwtDto = null;
         }
     }
 }

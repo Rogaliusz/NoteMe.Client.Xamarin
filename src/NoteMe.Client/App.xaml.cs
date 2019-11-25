@@ -32,6 +32,7 @@ namespace NoteMe.Client
         public Timer SynchronizationTimer { get; private set; }
         public TinyIoCContainer Container { get; private set; }
         public ApiWebSettings ApiWebSettings { get; private set; }
+        public INavigationService NavigationService { get; private set; }
         public bool IsLogged { get; private set; }
 
         public App()
@@ -102,7 +103,7 @@ namespace NoteMe.Client
                 SynchronizationTimer.Stop();
                 
                 var dbCleaner = Container.Resolve<ICleanService>();
-                await dbCleaner.CleanAsync();
+                dbCleaner.Clean();
                 
                 MainThread.BeginInvokeOnMainThread(InitializeStartPage);
             });
@@ -110,20 +111,27 @@ namespace NoteMe.Client
         
         private void InitializeStartPage()
         {
-            var navigationService = Container.Resolve<INavigationService>();
+            NavigationService = Container.Resolve<INavigationService>();
             
             ApiWebSettings = Container.Resolve<ApiWebSettings>();
+
+            if (ApiWebSettings.JwtDto != null && ApiWebSettings.JwtDto.Expires > DateTime.UtcNow)
+            {
+                var dbCleaner = Container.Resolve<ICleanService>();
+                dbCleaner.Clean();
+            }
+            
             IsLogged = ApiWebSettings.JwtDto != null;
             
             Current.MainPage = new AppShell();
                 
             if (!IsLogged)
             {
-                navigationService.NavigateAsync("//login");
+                NavigationService.NavigateAsync("//login");
             }
             else
             {
-                navigationService.NavigateAsync("//notes");
+                NavigationService.NavigateAsync("//notes");
                 InitializeTimer();
             }
         }
