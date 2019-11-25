@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace NoteMe.Client.ViewModels
     {
         private readonly NSubscription _newNotesSubscription;
         public ObservableCollection<Note> Notes { get; set; } = new ObservableCollection<Note>();
-        
+
         protected NoteViewModel(IViewModelFacade viewModelFacade) : base(viewModelFacade)
         {
             _newNotesSubscription = NPublisher.SubscribeIt<NewNotesMessage>(message =>
@@ -24,8 +25,11 @@ namespace NoteMe.Client.ViewModels
                 {
                     foreach (var note in message.Notes.Where(x => x.Status == StatusEnum.Normal))
                     {
-                        Notes.Add(note);
+                        Notes.Insert(0, note);
                     }
+                    
+                    OnPropertyChanged(nameof(Note.CreatedAt));
+                    OnPropertyChanged(nameof(Note.Name));
                 });
             });
         }

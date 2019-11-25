@@ -140,7 +140,7 @@ namespace NoteMe.Client
         {
             SynchronizationTimerTokenSource = new CancellationTokenSource();
 
-            SynchronizationTimer = new Timer {Interval = 1000 * 60};
+            SynchronizationTimer = new Timer {Interval = 1000 * 10};
             SynchronizationTimer.Elapsed += async (sender, args) => { await SynchronizeAsync().ConfigureAwait(false); };
 
             SynchronizationTimer.Start();

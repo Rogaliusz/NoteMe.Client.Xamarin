@@ -33,7 +33,7 @@ namespace NoteMe.Client.Domain.Notes
         {
             var list = await _noteMeSqlLiteContext.Notes
                 .Where(x => x.Status == StatusEnum.Normal)
-                .OrderBy(x => x.CreatedAt)
+                .OrderByDescending(x => x.CreatedAt)
                 .Skip(query.Page * query.PageSize)
                 .Take(query.PageSize)
                 .ToListAsync();

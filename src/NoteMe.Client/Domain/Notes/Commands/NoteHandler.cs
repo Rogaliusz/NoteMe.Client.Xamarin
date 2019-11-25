@@ -27,6 +27,7 @@ namespace NoteMe.Client.Domain.Notes.Commands
         public async Task HandleAsync(CreateNoteCommand command)
         {
             var note = _mapper.MapTo<Note>(command);
+            note.Id = Guid.NewGuid();
             note.NeedSynchronization = true;
             note.StatusSynchronization = SynchronizationStatusEnum.NeedInsert;
             
@@ -43,6 +44,7 @@ namespace NoteMe.Client.Domain.Notes.Commands
 
             note.CreatedAt = DateTime.UtcNow;
 
+            await _context.AddAsync(note);
             await _context.SaveChangesAsync();
             
             NPublisher.PublishIt(new NewNotesMessage(note));

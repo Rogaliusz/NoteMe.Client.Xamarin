@@ -85,6 +85,11 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
                 }
             } while (hasMore);
 
+            if (!allNotes.Any())
+            {
+                return;
+            }
+            
             await context.SaveChangesAsync(cts);
             
             NPublisher.PublishIt(new NewNotesMessage(allNotes));
@@ -94,15 +99,17 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
         {
             cts.ThrowIfCancellationRequested();
 
-            var toInserts = await context.Notes.AsTracking().Where(x => x.CreatedAt == default(DateTime)).ToListAsync(cts);
+            var toInserts = await context.Notes.AsTracking().Where(x => x.StatusSynchronization == SynchronizationStatusEnum.NeedInsert).ToListAsync(cts);
             var insertsCommands = _mapper.MapTo<ICollection<CreateNoteCommand>>(toInserts);
             foreach (var command in insertsCommands)
             {
-                var created = await _webService.SendAsync<NoteDto>(HttpMethod.Get, Endpoints.Notes._, command);
+                var created = await _webService.SendAsync<NoteDto>(HttpMethod.Post, Endpoints.Notes._, command);
                 var entity = toInserts.First(x => x.Id == command.Id);
+                
                 entity.LastSynchronization = DateTime.UtcNow;
                 entity.CreatedAt = created.CreatedAt;
                 entity.Status = created.Status;
+                entity.StatusSynchronization = SynchronizationStatusEnum.Ok;
             }
 
             await context.SaveChangesAsync(cts);

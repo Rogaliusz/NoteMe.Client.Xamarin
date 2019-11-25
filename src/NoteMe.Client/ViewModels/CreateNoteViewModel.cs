@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using NoteMe.Common.Domain.Notes.Commands;
@@ -29,11 +31,20 @@ namespace NoteMe.Client.ViewModels
             set => SetPropertyAndValidate(ref _content, value);
         }
         
+        public ObservableCollection<Attachment> Attachments { get; set; } = new ObservableCollection<Attachment>();
+        
         public ICommand CreateCommand { get; }
+        public ICommand UploadCommand { get; }
         
         protected CreateNoteViewModel(IViewModelFacade viewModelFacade) : base(viewModelFacade)
         {
             CreateCommand = new Command(async () => await CreateNoteAsync(), Validate);
+            UploadCommand = new Command(async () => await AddAttachmentAsync());
+        }
+
+        private async Task AddAttachmentAsync()
+        {
+
         }
 
         protected override void IsValidChanged()
@@ -46,6 +57,7 @@ namespace NoteMe.Client.ViewModels
             var command = MapTo<CreateNoteCommand>(this);
 
             await DispatchCommandAsync(command);
+            await NavigateTo("//notes");
         }
     }
 }

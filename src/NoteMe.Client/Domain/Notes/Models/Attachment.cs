@@ -14,6 +14,7 @@ namespace NoteMe.Client.Domain.Notes
         public DateTime? LastSynchronization { get; set; }
         public bool NeedSynchronization { get; set; }
         public SynchronizationStatusEnum StatusSynchronization { get; set; }
+        public string Path { get; set; }
 
         public Guid NoteId { get; set; }
         public Note Note { get; set; }

@@ -49,6 +49,12 @@
                                  BackgroundColor="{StaticResource Background}" 
                                  VerticalOptions="FillAndExpand" 
                                  HorizontalOptions="FillAndExpand">
+                        <ImageButton Source="upload_icon.png" 
+                                     HorizontalOptions="CenterAndExpand"
+                                     VerticalOptions="CenterAndExpand"
+                                     HeightRequest="45"
+                                     WidthRequest="45"
+                                     Command="{Binding UploadCommand}"></ImageButton>
                     </StackLayout>
                     
                     <StackLayout Grid.Row="4">
