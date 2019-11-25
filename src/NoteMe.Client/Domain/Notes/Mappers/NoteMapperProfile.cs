@@ -1,4 +1,5 @@
 using NoteMe.Client.Framework.Mappers;
+using NoteMe.Client.ViewModels;
 using NoteMe.Common.Domain.Notes.Commands;
 using NoteMe.Common.Domain.Notes.Dto;
 
@@ -14,6 +15,8 @@ namespace NoteMe.Client.Domain.Notes.Mappers
                 .ReverseMap();
             CreateMap<UpdateNoteCommand, Note>()
                 .ReverseMap();
+            
+            CreateMap<CreateNoteViewModel, CreateNoteCommand>();
             
             CreateMap<Attachment, AttachmentDto>();
             CreateMap<CreateAttachmentCommand, Attachment>();

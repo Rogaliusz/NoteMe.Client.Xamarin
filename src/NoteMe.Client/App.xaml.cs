@@ -115,7 +115,7 @@ namespace NoteMe.Client
             
             ApiWebSettings = Container.Resolve<ApiWebSettings>();
 
-            if (ApiWebSettings.JwtDto != null && ApiWebSettings.JwtDto.Expires > DateTime.UtcNow)
+            if (ApiWebSettings.JwtDto != null && ApiWebSettings.JwtDto.Expires < DateTime.UtcNow)
             {
                 var dbCleaner = Container.Resolve<ICleanService>();
                 dbCleaner.Clean();

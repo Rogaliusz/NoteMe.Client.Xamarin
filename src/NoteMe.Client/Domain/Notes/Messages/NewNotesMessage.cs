@@ -6,7 +6,7 @@ namespace NoteMe.Client.Domain.Notes.Messages
 {
     public class NewNotesMessage : NMessage
     {
-        public ICollection<Note> Notes { get; set; }
+        public ICollection<Note> Notes { get; set; } = new List<Note>();
 
         public NewNotesMessage()
         {
@@ -17,7 +17,10 @@ namespace NoteMe.Client.Domain.Notes.Messages
         {
             Notes = notes;
         }
-
-
+        
+        public NewNotesMessage(Note note)
+        {
+            Notes.Add(note);
+        }
     }
 }

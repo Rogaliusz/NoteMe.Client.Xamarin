@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
+using NoteMe.Common.Domain.Notes.Commands;
 using Xamarin.Forms;
 
 namespace NoteMe.Client.ViewModels
@@ -42,7 +43,9 @@ namespace NoteMe.Client.ViewModels
 
         private async Task CreateNoteAsync()
         {
-            
+            var command = MapTo<CreateNoteCommand>(this);
+
+            await DispatchCommandAsync(command);
         }
     }
 }
