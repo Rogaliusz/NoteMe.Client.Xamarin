@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 
 using Foundation;
+using NoteMe.Client.Framework.Platform;
+using NoteMe.Client.iOS.Platform;
 using NoteMe.Client.Sql;
 using TinyIoC;
 using UIKit;
@@ -30,6 +32,18 @@ namespace NoteMe.Client.iOS
             global::Xamarin.Forms.Forms.SetFlags("CollectionView_Experimental");
             global::Xamarin.Forms.Forms.Init();
 
+            var settings = CreateSqlSettings();
+
+            LoadApplication(new App());
+
+            TinyIoCContainer.Current.Register(settings);
+            TinyIoCContainer.Current.Register<IFilePathService, FilePathService>();
+
+            return base.FinishedLaunching(app, options);
+        }
+
+        private static SqliteSettings CreateSqlSettings()
+        {
             var libPath = Path.Combine(Environment.GetFolderPath((Environment.SpecialFolder.MyDocuments)),
                 "..",
                 "Library",
@@ -45,12 +59,7 @@ namespace NoteMe.Client.iOS
                 Path = Path.Combine(libPath,
                     "database.sqlite")
             };
-
-            LoadApplication(new App());
-
-            TinyIoCContainer.Current.Register(settings);
-
-            return base.FinishedLaunching(app, options);
+            return settings;
         }
     }
 }

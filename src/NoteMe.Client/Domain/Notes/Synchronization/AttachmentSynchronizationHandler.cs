@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using NoteMe.Client.Domain.Synchronization.Handlers;
 using NoteMe.Client.Framework.Cqrs;
 using NoteMe.Client.Framework.Mappers;
+using NoteMe.Client.Framework.Platform;
 using NoteMe.Client.Sql;
 using NoteMe.Common.DataTypes;
 using NoteMe.Common.DataTypes.Enums;
@@ -21,13 +22,16 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
 {
     public class AttachmentSynchronizationHandler : ISynchronizationHandler<Attachment>
     {
+        private readonly IFilePathService _filePathService;
         private readonly ApiWebService _apiWebService;
         private readonly INoteMeClientMapper _mapper;
 
         public AttachmentSynchronizationHandler(
+            IFilePathService filePathService,
             ApiWebService apiWebService,
             INoteMeClientMapper mapper)
         {
+            _filePathService = filePathService;
             _apiWebService = apiWebService;
             _mapper = mapper;
         }
@@ -38,9 +42,10 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
             CancellationToken cts)
         {
             await FetchAllAttachmentsAsync(synchronization, context, cts);
+            await DownloadAllAttachmentsAsync(context, cts);
+            
             await CreateAllAttachmentsAsync(synchronization, context, cts);
             await UploadAllAttachmentsAsync(context, cts);
-            //await DownloadAllAttachmentsAsync(context, cts);
         }
         
         private async Task FetchAllAttachmentsAsync(Domain.Synchronization.Synchronization synchronization, NoteMeSqlLiteContext context,
@@ -133,15 +138,17 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
             cts.ThrowIfCancellationRequested();
 
             var attachmentsWithoutPath = await context.Attachments
-                .Where(x => string.IsNullOrEmpty(x.Path))
                 .AsTracking()
                 .ToListAsync(cts);
 
-            foreach (var attachment in attachmentsWithoutPath)
+            foreach (var attachment in attachmentsWithoutPath.Where(x => string.IsNullOrEmpty(x.Path) || !File.Exists(x.Path)))
             {
                 cts.ThrowIfCancellationRequested();
 
-                var fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "temp.txt");
+                var fullFilePath = Path.Combine(_filePathService.GetFilesDirectory(), attachment.Name);
+                await _apiWebService.DownloadAsync(Endpoints.Attachments.Download + attachment.Id, fullFilePath);
+
+                attachment.Path = fullFilePath;
                 
                 await context.SaveChangesAsync(cts);
             }

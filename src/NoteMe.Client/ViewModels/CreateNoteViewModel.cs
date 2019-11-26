@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using NoteMe.Client.Domain.Notes;
 using NoteMe.Client.Domain.Notes.Commands;
+using NoteMe.Client.Framework.Platform;
 using NoteMe.Common.DataTypes.Enums;
 using NoteMe.Common.Domain.Notes.Commands;
 using Plugin.FilePicker;
@@ -16,6 +17,8 @@ namespace NoteMe.Client.ViewModels
 {
     public class CreateNoteViewModel : ViewModelBase
     {
+        private readonly IFilePathService _filePathService;
+        
         private string _name;
         private string _tags;
         private string _content;
@@ -54,8 +57,12 @@ namespace NoteMe.Client.ViewModels
         public ICommand CreateCommand { get; }
         public ICommand UploadCommand { get; }
         
-        protected CreateNoteViewModel(IViewModelFacade viewModelFacade) : base(viewModelFacade)
+        protected CreateNoteViewModel(
+            IFilePathService filePathService,
+            IViewModelFacade viewModelFacade) : base(viewModelFacade)
         {
+            _filePathService = filePathService;
+            
             CreateCommand = new Command(async () => await CreateNoteAsync(), Validate);
             UploadCommand = new Command(async () => await AddAttachmentAsync());
         }
@@ -63,7 +70,7 @@ namespace NoteMe.Client.ViewModels
         private async Task AddAttachmentAsync()
         {
             var data = await CrossFilePicker.Current.PickFile();
-            var newPath = Path.Combine(FileSystem.AppDataDirectory, data?.FileName ?? string.Empty);
+            var newPath = Path.Combine(_filePathService.GetFilesDirectory(), data?.FileName ?? string.Empty);
             
             if (data == null || Attachments.Any(x => x.Path == newPath))
             {

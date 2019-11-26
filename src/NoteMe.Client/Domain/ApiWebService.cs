@@ -41,14 +41,20 @@ namespace NoteMe.Client.Domain
             Authorize();
             
             var url = new Uri(_apiWebSettings.Address + endpoint);
-            var response = await _httpClient.GetAsync(url);
+            var response = await _httpClient.GetByteArrayAsync(url);
+            
+            File.WriteAllBytes(path, response);
 
-            return null;
+            return path;
         }
 
         public async Task UploadAsync(string endpoint, string fullPath, Guid id)
         {
             var isExists = File.Exists(fullPath);
+            if (!isExists)
+            {
+                return;
+            }
             
             using (var stream = File.OpenRead(fullPath))
             {
