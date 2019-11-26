@@ -43,7 +43,9 @@
                                  BackgroundColor="{StaticResource Background}" 
                                  VerticalOptions="FillAndExpand" 
                                  HorizontalOptions="FillAndExpand">
-                        <CarouselView ItemsSource="{Binding Attachments}"  >
+                        <CarouselView ItemsSource="{Binding Attachments}" 
+                                      CurrentItem="{Binding CurrentAttachment}"
+                                      PeekAreaInsets="50">
                             <CarouselView.ItemTemplate>
                                 <DataTemplate>
                                     <StackLayout VerticalOptions="CenterAndExpand"

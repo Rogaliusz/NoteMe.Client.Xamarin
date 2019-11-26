@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -8,6 +9,7 @@ using NoteMe.Client.Domain.Notes.Commands;
 using NoteMe.Common.DataTypes.Enums;
 using NoteMe.Common.Domain.Notes.Commands;
 using Plugin.FilePicker;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace NoteMe.Client.ViewModels
@@ -61,8 +63,9 @@ namespace NoteMe.Client.ViewModels
         private async Task AddAttachmentAsync()
         {
             var data = await CrossFilePicker.Current.PickFile();
+            var newPath = Path.Combine(FileSystem.AppDataDirectory, data?.FileName ?? string.Empty);
             
-            if (data == null || Attachments.Any(x => x.Path == data.FilePath))
+            if (data == null || Attachments.Any(x => x.Path == newPath))
             {
                 return;
             }
@@ -72,10 +75,12 @@ namespace NoteMe.Client.ViewModels
                 Id = Guid.NewGuid(),
                 NeedSynchronization = true,
                 StatusSynchronization = SynchronizationStatusEnum.NeedInsert,
-                Path = data.FilePath,
+                Path = newPath,
                 Name = data.FileName
             };
             
+            File.WriteAllBytes(newPath, data.DataArray);
+
             Attachments.Add(attachment);
         }
 
@@ -94,7 +99,7 @@ namespace NoteMe.Client.ViewModels
         
         private void CurrentAttachmentChangedHandler()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(CurrentAttachment);
         }
     }
 }
