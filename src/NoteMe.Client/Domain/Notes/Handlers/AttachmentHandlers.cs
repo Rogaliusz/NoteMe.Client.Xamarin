@@ -7,15 +7,19 @@ using NoteMe.Client.Framework.Platform;
 using NoteMe.Common.DataTypes;
 using NoteMe.Common.DataTypes.Enums;
 using Plugin.FilePicker;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace NoteMe.Client.Domain.Notes.Handlers
 {
-    public interface IAddAttachmentHandler
+    public interface IAttachmentHandler
     {
         Task AddAsync(ICollection<Attachment> attachments);
+
+        Task OpenAsync(Attachment note);
     }
-    
-    public class AttachmentHandlers : IAddAttachmentHandler
+
+    public class AttachmentHandlers : IAttachmentHandler
     {
         private readonly IFilePathService _filePathService;
 
@@ -46,6 +50,16 @@ namespace NoteMe.Client.Domain.Notes.Handlers
             File.WriteAllBytes(newPath, data.DataArray);
 
             attachments.Add(attachment);
+        }
+
+        public async Task OpenAsync(Attachment attachment)
+        {
+            var openFileRequest = new OpenFileRequest
+            {
+                File = new ReadOnlyFile(attachment.Path)
+            };
+
+            await Launcher.OpenAsync(openFileRequest);
         }
     }
 }

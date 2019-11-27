@@ -29,7 +29,7 @@ namespace NoteMe.Client.iOS
         {
             SQLitePCL.Batteries_V2.Init();
 
-            global::Xamarin.Forms.Forms.SetFlags("CollectionView_Experimental");
+            global::Xamarin.Forms.Forms.SetFlags("CollectionView_Experimental", "OpenFileRequest_Experimental");
             global::Xamarin.Forms.Forms.Init();
 
             var settings = CreateSqlSettings();

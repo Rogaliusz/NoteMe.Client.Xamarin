@@ -5,7 +5,8 @@
              x:Class="NoteMe.Client.Views.Controls.AttachmentControl"
     BackgroundColor="{StaticResource Background}" 
     VerticalOptions="FillAndExpand" 
-    HorizontalOptions="FillAndExpand">
+    HorizontalOptions="FillAndExpand"
+             x:Name="page">
     <CarouselView ItemsSource="{Binding Attachments}" 
                   CurrentItem="{Binding CurrentAttachment}"
                   PeekAreaInsets="50">
@@ -14,10 +15,9 @@
                 <StackLayout VerticalOptions="CenterAndExpand"
                              HorizontalOptions="CenterAndExpand" 
                              Margin="10">
-                    <Label Style="{StaticResource ErrorLabelStyle}"
-                           HorizontalTextAlignment="Center" 
-                           VerticalTextAlignment="Center"
-                           Text="{Binding Name}"></Label>
+                    <Button FontSize="12"
+                            Text="{Binding Name}"
+                            Command="{Binding Path=BindingContext.OpenAttachmentCommand, Source={x:Reference page}}"/>
                 </StackLayout>
             </DataTemplate>
         </CarouselView.ItemTemplate>

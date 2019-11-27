@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:forms="clr-namespace:NoteMe.Client.Views.Forms;assembly=NoteMe.Client"
              x:Class="NoteMe.Client.Views.UpdateNoteView"
+             x:Name="page"
              BindingContext="{Binding NoteUpdateViewModel, Source={StaticResource ViewModelLocator}}">
     <ContentPage.Content>
         <forms:NoteForm />

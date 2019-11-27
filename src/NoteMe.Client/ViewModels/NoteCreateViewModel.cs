@@ -19,7 +19,7 @@ namespace NoteMe.Client.ViewModels
 {
     public class NoteCreateViewModel : ViewModelBase, INoteForm
     {
-        private readonly IAddAttachmentHandler _addAttachmentHandler;
+        private readonly IAttachmentHandler _attachmentHandler;
 
         private string _name;
         private string _tags;
@@ -56,25 +56,27 @@ namespace NoteMe.Client.ViewModels
         
         public ObservableCollection<Attachment> Attachments { get; set; } = new ObservableCollection<Attachment>();
         
-        public ICommand SaveCommand { get; }
-        public ICommand UploadCommand { get; }
-        
+        public Command SaveCommand { get; }
+        public Command UploadCommand { get; }
+        public Command OpenAttachmentCommand { get; }
+
         protected NoteCreateViewModel(
-            IAddAttachmentHandler addAttachmentHandler,
+            IAttachmentHandler attachmentHandler,
             IViewModelFacade viewModelFacade) : base(viewModelFacade)
         {
-            _addAttachmentHandler = addAttachmentHandler;
+            _attachmentHandler = attachmentHandler;
             
             SaveCommand = new Command(async () => await CreateNoteAsync(), Validate);
             UploadCommand = new Command(async () => await AddAttachmentAsync());
+            OpenAttachmentCommand = new Command(async () => await _attachmentHandler.OpenAsync(CurrentAttachment));
         }
 
         private Task AddAttachmentAsync()
-            => _addAttachmentHandler.AddAsync(Attachments);
+            => _attachmentHandler.AddAsync(Attachments);
 
         protected override void IsValidChanged()
         {
-            ((Command)SaveCommand).ChangeCanExecute();
+            SaveCommand.ChangeCanExecute();
         }
 
         private async Task CreateNoteAsync()

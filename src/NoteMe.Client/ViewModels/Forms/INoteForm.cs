@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using NoteMe.Client.Domain.Notes;
 using NoteMe.Client.Framework.Validation;
+using Xamarin.Forms;
 
 namespace NoteMe.Client.ViewModels.Forms
 {
@@ -14,7 +15,8 @@ namespace NoteMe.Client.ViewModels.Forms
         Attachment CurrentAttachment { get; set; }
         ObservableCollection<Attachment> Attachments { get; set; }
         
-        ICommand SaveCommand { get; }
-        ICommand UploadCommand { get; }
+        Command SaveCommand { get; }
+        Command UploadCommand { get; }
+        Command OpenAttachmentCommand { get; }
     }
 }

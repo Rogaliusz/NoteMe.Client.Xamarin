@@ -8,12 +8,12 @@ using NoteMe.Common.Domain.Notes.Dto;
 
 namespace NoteMe.Client.Domain.Notes.Commands
 {
-    public class AttachmentHandler : 
+    public class AttachmentCommandHandler : 
         ICommandHandler<CreateAttachmentCommand>
     {
         private readonly ApiWebService _apiWebService;
 
-        public AttachmentHandler(ApiWebService apiWebService)
+        public AttachmentCommandHandler(ApiWebService apiWebService)
         {
             _apiWebService = apiWebService;
         }

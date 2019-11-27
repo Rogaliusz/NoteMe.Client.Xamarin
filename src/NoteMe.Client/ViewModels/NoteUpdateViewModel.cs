@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using NoteMe.Client.Domain.Notes;
@@ -13,7 +14,7 @@ namespace NoteMe.Client.ViewModels
 {
     public class NoteUpdateViewModel : ViewModelBase, INoteForm
     {
-        private readonly IAddAttachmentHandler _addAttachmentHandler;
+        private readonly IAttachmentHandler _attachmentHandler;
         private string _name;
         private string _tags;
         private string _content;
@@ -50,17 +51,19 @@ namespace NoteMe.Client.ViewModels
 
         public ObservableCollection<Attachment> Attachments { get; set; } = new ObservableCollection<Attachment>();
         
-        public ICommand SaveCommand { get; }
-        public ICommand UploadCommand { get; }
-        
+        public Command SaveCommand { get; }
+        public Command UploadCommand { get; }
+        public Command OpenAttachmentCommand { get; }
+
         protected NoteUpdateViewModel(
-            IAddAttachmentHandler addAttachmentHandler,
+            IAttachmentHandler attachmentHandler,
             IViewModelFacade viewModelFacade) : base(viewModelFacade)
         {
-            _addAttachmentHandler = addAttachmentHandler;
+            _attachmentHandler = attachmentHandler;
             
             SaveCommand = new Command(async () => await UpdateNoteAsync(), Validate);
             UploadCommand = new Command(async () => await AddAttachmentAsync());
+            OpenAttachmentCommand = new Command(async () => await _attachmentHandler.OpenAsync(CurrentAttachment));
         }
 
         protected override void IsValidChanged()
@@ -85,7 +88,7 @@ namespace NoteMe.Client.ViewModels
         }
 
         private Task AddAttachmentAsync()
-            => _addAttachmentHandler.AddAsync(Attachments);
+            => _attachmentHandler.AddAsync(Attachments);
 
         public override async Task InitializeAsync(object parameter = null)
         {
@@ -105,6 +108,8 @@ namespace NoteMe.Client.ViewModels
             {
                 Attachments.Add(attachment);
             }
+
+            CurrentAttachment = Attachments.FirstOrDefault();
         }
     }
 }
