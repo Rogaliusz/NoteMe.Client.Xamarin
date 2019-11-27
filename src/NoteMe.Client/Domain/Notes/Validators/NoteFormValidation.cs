@@ -1,12 +1,13 @@
 using FluentValidation;
 using NoteMe.Client.Framework.Validation;
 using NoteMe.Client.ViewModels;
+using NoteMe.Client.ViewModels.Forms;
 
 namespace NoteMe.Client.Domain.Notes.Validators
 {
-    public class CreateNoteValidator : AbstractValidator<CreateNoteViewModel>
+    public class NoteFormValidator : AbstractValidator<INoteForm>
     {
-        public CreateNoteValidator()
+        public NoteFormValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage(ValidationCodes.MustBeNotEmpty);

@@ -13,6 +13,7 @@ namespace NoteMe.Client
         {
             Routing.RegisterRoute("login", typeof(LoginView));
             Routing.RegisterRoute("register", typeof(RegisterView));
+            Routing.RegisterRoute("notes/details", typeof(UpdateNoteView));
 
             InitializeComponent();
 

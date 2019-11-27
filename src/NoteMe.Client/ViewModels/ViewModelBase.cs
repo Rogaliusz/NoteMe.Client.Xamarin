@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using FluentValidation;
+using NoteMe.Client.Framework.Validation;
 using NoteMe.Common.Providers;
 using IQueryProvider = NoteMe.Common.Providers.IQueryProvider;
 
@@ -15,7 +16,7 @@ namespace NoteMe.Client.ViewModels
         private readonly IViewModelFacade _viewModelFacade;
 
         private string _lastValidationErrorMessage = "";
-        private IValidator _validator;
+        private IDictionary<Type, IValidator> _validators = new Dictionary<Type, IValidator>();
         
         private bool _isBusy = false;
         private bool _isValid = false;
@@ -96,12 +97,25 @@ namespace NoteMe.Client.ViewModels
         
         protected virtual bool Validate()
         {
-            if (_validator == null)
+            var types = this.GetType()
+                .GetInterfaces()
+                .Where(x => typeof(IValidationForm).IsAssignableFrom(x) && x != typeof(IValidationForm))
+                .Append(this.GetType())
+                .ToList();
+
+            return types.All(Validate);
+        }
+
+        private bool Validate(Type type)
+        {
+            if (!_validators.ContainsKey(type))
             {
-                _validator = _viewModelFacade.ValidationDispatcher.GetValidator(this.GetType());
+                var validatorToAdd = _viewModelFacade.ValidationDispatcher.GetValidator(type);
+                _validators.Add(type, validatorToAdd);
             }
 
-            var validationResult = _validator.ValidateAsync(this);
+            var validator = _validators[type];
+            var validationResult = validator.ValidateAsync(this);
             var error = validationResult.Result.Errors.FirstOrDefault();
             
             if (error == null)
@@ -134,6 +148,9 @@ namespace NoteMe.Client.ViewModels
 
         protected TDest MapTo<TDest>(object obj) 
             => _viewModelFacade.Mapper.MapTo<TDest>(obj);
+        
+        protected TDest MapTo<TSrc, TDest>(TSrc obj, TDest dest) 
+            => _viewModelFacade.Mapper.MapTo(obj, dest);
 
         protected Task NavigateTo(string route)
             => _viewModelFacade.NavigationService.NavigateAsync(route);
@@ -141,7 +158,6 @@ namespace NoteMe.Client.ViewModels
         protected string Translate(string text)
             => _viewModelFacade.TranslationService.Translate(text);
         
-
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")

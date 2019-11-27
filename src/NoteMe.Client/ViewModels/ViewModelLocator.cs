@@ -7,6 +7,7 @@ namespace NoteMe.Client.ViewModels
         public LoginViewModel LoginViewModel => TinyIoCContainer.Current.Resolve<LoginViewModel>();
         public RegisterViewModel RegisterViewModel => TinyIoCContainer.Current.Resolve<RegisterViewModel>();
         public NoteViewModel NoteViewModel => TinyIoCContainer.Current.Resolve<NoteViewModel>();
-        public CreateNoteViewModel CreateNoteViewModel => TinyIoCContainer.Current.Resolve<CreateNoteViewModel>();
+        public NoteCreateViewModel NoteCreateViewModel => TinyIoCContainer.Current.Resolve<NoteCreateViewModel>();
+        public NoteUpdateViewModel NoteUpdateViewModel => TinyIoCContainer.Current.Resolve<NoteUpdateViewModel>();
     }
 }

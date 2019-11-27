@@ -5,6 +5,8 @@ namespace NoteMe.Client.Framework.Mappers
     public interface INoteMeClientMapper
     {
         TDest MapTo<TDest>(object obj);
+
+        TDest MapTo<TSrc, TDest>(TSrc obj, TDest dst);
     }
     
     public class NoteMeClientMapper : INoteMeClientMapper
@@ -18,5 +20,8 @@ namespace NoteMe.Client.Framework.Mappers
 
         public TDest MapTo<TDest>(object obj)
             => _mapper.Map<TDest>(obj);
+
+        public TDest MapTo<TSrc, TDest>(TSrc obj, TDest dst)
+            => _mapper.Map<TSrc, TDest>(obj, dst);
     }
 }

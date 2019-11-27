@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<RelativeLayout xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:extensions="clr-namespace:NoteMe.Client.Framework.Extensions;assembly=NoteMe.Client"
-             BindingContext="{Binding CreateNoteViewModel, Source={StaticResource ViewModelLocator}}"
-             x:Class="NoteMe.Client.Views.CreateNoteView">
-    <ContentPage.Content>
-        <RelativeLayout>
-            <Image Source="logged_background.png"
+             xmlns:controls="clr-namespace:NoteMe.Client.Views.Controls;assembly=NoteMe.Client"
+             x:Class="NoteMe.Client.Views.Forms.NoteForm">
+                <Image Source="logged_background.png"
                    Aspect="Fill"
                    RelativeLayout.WidthConstraint=
                    "{ConstraintExpression Type=RelativeToParent, Property=Width}"
@@ -39,27 +37,7 @@
                                 BackgroundColor="{StaticResource Background}"></Editor>
                     </StackLayout>
                     
-                    <StackLayout Grid.Row="2" 
-                                 BackgroundColor="{StaticResource Background}" 
-                                 VerticalOptions="FillAndExpand" 
-                                 HorizontalOptions="FillAndExpand">
-                        <CarouselView ItemsSource="{Binding Attachments}" 
-                                      CurrentItem="{Binding CurrentAttachment}"
-                                      PeekAreaInsets="50">
-                            <CarouselView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackLayout VerticalOptions="CenterAndExpand"
-                                        HorizontalOptions="CenterAndExpand" 
-                                        Margin="10">
-                                        <Label Style="{StaticResource ErrorLabelStyle}"
-                                               HorizontalTextAlignment="Center" 
-                                               VerticalTextAlignment="Center"
-                                               Text="{Binding Name}"></Label>
-                                    </StackLayout>
-                                </DataTemplate>
-                            </CarouselView.ItemTemplate>
-                        </CarouselView>
-                    </StackLayout>
+                    <controls:AttachmentControl Grid.Row="2" />
                     
                     <StackLayout Grid.Row="3" 
                                  BackgroundColor="{StaticResource Background}" 
@@ -75,10 +53,8 @@
                     
                     <StackLayout Grid.Row="4">
                         <Label Style="{StaticResource ErrorLabelStyle}" Text="{Binding Error}"></Label>
-                        <Button Text="{extensions:Translate NoteCreate}" Command="{Binding CreateCommand}"></Button>
+                        <Button Text="{extensions:Translate Save}" Command="{Binding CreateCommand}"></Button>
                     </StackLayout>
 
                 </Grid>
-        </RelativeLayout>
-    </ContentPage.Content>
-</ContentPage>
+</RelativeLayout>

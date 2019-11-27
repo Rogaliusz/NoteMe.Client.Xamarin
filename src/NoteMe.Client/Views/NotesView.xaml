@@ -3,6 +3,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NoteMe.Client.Views.NotesView"
+             x:Name="page"
              BindingContext="{Binding NoteViewModel, Source={StaticResource ViewModelLocator}}">
     <ContentPage.Content>
         <RelativeLayout>
@@ -17,7 +18,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <StackLayout Margin="10" >
-                                <Grid BackgroundColor="{StaticResource Background}" Padding="10" >
+                                <Grid BackgroundColor="{StaticResource Background}" Padding="10"  >
                                     <Grid.RowDefinitions>
                                         <RowDefinition></RowDefinition>
                                         <RowDefinition></RowDefinition>
@@ -45,6 +46,11 @@
                                             FontSize="10"
                                             HorizontalOptions="EndAndExpand"/>
                                     
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" 
+                                                              Command="{Binding Path=BindingContext.SelectNoteCommand, Source={x:Reference page}}" 
+                                                              CommandParameter="{Binding .}"></TapGestureRecognizer>
+                                    </Grid.GestureRecognizers>
                                 </Grid>
                             </StackLayout>
                         </DataTemplate>

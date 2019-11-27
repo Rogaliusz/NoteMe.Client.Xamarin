@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:extensions="clr-namespace:NoteMe.Client.Framework.Extensions;assembly=NoteMe.Client"
+             xmlns:controls="clr-namespace:NoteMe.Client.Views.Controls;assembly=NoteMe.Client"
+             xmlns:forms="clr-namespace:NoteMe.Client.Views.Forms;assembly=NoteMe.Client"
+             BindingContext="{Binding NoteCreateViewModel, Source={StaticResource ViewModelLocator}}"
+             x:Class="NoteMe.Client.Views.CreateNoteView">
+    <ContentPage.Content>
+        <forms:NoteForm />
+    </ContentPage.Content>
+</ContentPage>

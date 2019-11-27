@@ -19,11 +19,13 @@ namespace NoteMe.Client.Domain.Notes.Mappers
             CreateMap<UpdateNoteCommand, Note>()
                 .ReverseMap();
             
-            CreateMap<CreateNoteViewModel, CreateNoteInSqliteCommand>();
+            CreateMap<NoteCreateViewModel, CreateNoteInSqliteCommand>();
 
             CreateMap<Attachment, AttachmentDto>()
                 .ReverseMap();
             CreateMap<CreateAttachmentCommand, Attachment>()
+                .ReverseMap();
+            CreateMap<Note, NoteUpdateViewModel>()
                 .ReverseMap();
         }
     }

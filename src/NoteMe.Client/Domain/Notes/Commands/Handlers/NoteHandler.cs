@@ -11,7 +11,8 @@ using Xamarin.Essentials;
 
 namespace NoteMe.Client.Domain.Notes.Commands
 {
-    public class NoteHandler : ICommandHandler<CreateNoteInSqliteCommand>
+    public class NoteHandler : ICommandHandler<CreateNoteInSqliteCommand>,
+        ICommandHandler<UpdateNoteSqliteCommand>
     {
         private readonly NoteMeClientMapper _mapper;
         private readonly NoteMeSqlLiteContext _context;
@@ -48,6 +49,14 @@ namespace NoteMe.Client.Domain.Notes.Commands
             await _context.SaveChangesAsync();
             
             NPublisher.PublishIt(new NewNotesMessage(note));
+        }
+
+        public async Task HandleAsync(UpdateNoteSqliteCommand command)
+        {
+            command.Note.StatusSynchronization = SynchronizationStatusEnum.NeedUpdate;
+            _context.Update(command.Note);
+
+            await _context.SaveChangesAsync();
         }
     }
 }

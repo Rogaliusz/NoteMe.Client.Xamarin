@@ -12,11 +12,14 @@ using NoteMe.Common.Domain.Notes.Queries;
 using NoteMe.Common.Domain.Pagination;
 using N.Pag.Extensions;
 using NoteMe.Client.Domain.Notes.Queries;
+using NoteMe.Common.DataTypes.Domain.Notes.Queries;
 using NoteMe.Common.DataTypes.Enums;
 
 namespace NoteMe.Client.Domain.Notes
 {
-    public class NoteQueryHandler : IQueryHandler<GetActiveNotesQuery, ICollection<Note>>
+    public class NoteQueryHandler : 
+        IQueryHandler<GetActiveNotesQuery, ICollection<Note>>,
+        IQueryHandler<GetNoteQuery, Note>
     {
         private readonly INoteMeClientMapper _mapper;
         private readonly NoteMeSqlLiteContext _noteMeSqlLiteContext;
@@ -39,6 +42,14 @@ namespace NoteMe.Client.Domain.Notes
                 .ToListAsync();
 
             return _mapper.MapTo<ICollection<Note>>(list);
+        }
+
+        public Task<Note> HandleAsync(GetNoteQuery query)
+        {
+            return _noteMeSqlLiteContext.Notes
+                .AsNoTracking()
+                .Include(x => x.Attachments)
+                .FirstAsync(x => x.Id == query.Id);
         }
     }
 }

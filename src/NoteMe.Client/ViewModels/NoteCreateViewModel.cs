@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using NoteMe.Client.Domain.Notes;
 using NoteMe.Client.Domain.Notes.Commands;
+using NoteMe.Client.Domain.Notes.Handlers;
 using NoteMe.Client.Framework.Platform;
+using NoteMe.Client.ViewModels.Forms;
 using NoteMe.Common.DataTypes.Enums;
 using NoteMe.Common.Domain.Notes.Commands;
 using Plugin.FilePicker;
@@ -15,10 +17,10 @@ using Xamarin.Forms;
 
 namespace NoteMe.Client.ViewModels
 {
-    public class CreateNoteViewModel : ViewModelBase
+    public class NoteCreateViewModel : ViewModelBase, INoteForm
     {
-        private readonly IFilePathService _filePathService;
-        
+        private readonly IAddAttachmentHandler _addAttachmentHandler;
+
         private string _name;
         private string _tags;
         private string _content;
@@ -54,46 +56,25 @@ namespace NoteMe.Client.ViewModels
         
         public ObservableCollection<Attachment> Attachments { get; set; } = new ObservableCollection<Attachment>();
         
-        public ICommand CreateCommand { get; }
+        public ICommand SaveCommand { get; }
         public ICommand UploadCommand { get; }
         
-        protected CreateNoteViewModel(
-            IFilePathService filePathService,
+        protected NoteCreateViewModel(
+            IAddAttachmentHandler addAttachmentHandler,
             IViewModelFacade viewModelFacade) : base(viewModelFacade)
         {
-            _filePathService = filePathService;
+            _addAttachmentHandler = addAttachmentHandler;
             
-            CreateCommand = new Command(async () => await CreateNoteAsync(), Validate);
+            SaveCommand = new Command(async () => await CreateNoteAsync(), Validate);
             UploadCommand = new Command(async () => await AddAttachmentAsync());
         }
 
-        private async Task AddAttachmentAsync()
-        {
-            var data = await CrossFilePicker.Current.PickFile();
-            var newPath = Path.Combine(_filePathService.GetFilesDirectory(), data?.FileName ?? string.Empty);
-            
-            if (data == null || Attachments.Any(x => x.Path == newPath))
-            {
-                return;
-            }
-
-            var attachment = new Attachment
-            {
-                Id = Guid.NewGuid(),
-                NeedSynchronization = true,
-                StatusSynchronization = SynchronizationStatusEnum.NeedInsert,
-                Path = newPath,
-                Name = data.FileName
-            };
-            
-            File.WriteAllBytes(newPath, data.DataArray);
-
-            Attachments.Add(attachment);
-        }
+        private Task AddAttachmentAsync()
+            => _addAttachmentHandler.AddAsync(Attachments);
 
         protected override void IsValidChanged()
         {
-            ((Command)CreateCommand).ChangeCanExecute();
+            ((Command)SaveCommand).ChangeCanExecute();
         }
 
         private async Task CreateNoteAsync()
