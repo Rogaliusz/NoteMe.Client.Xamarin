@@ -47,7 +47,7 @@ namespace NoteMe.Client.Domain.Notes
         public Task<Note> HandleAsync(GetNoteQuery query)
         {
             return _noteMeSqlLiteContext.Notes
-                .AsNoTracking()
+                .AsTracking()
                 .Include(x => x.Attachments)
                 .FirstAsync(x => x.Id == query.Id);
         }

@@ -54,8 +54,6 @@ namespace NoteMe.Client.Domain.Notes.Commands
         public async Task HandleAsync(UpdateNoteSqliteCommand command)
         {
             command.Note.StatusSynchronization = SynchronizationStatusEnum.NeedUpdate;
-            _context.Update(command.Note);
-
             await _context.SaveChangesAsync();
         }
     }

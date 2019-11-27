@@ -103,7 +103,8 @@ namespace NoteMe.Client.ViewModels
                 .Append(this.GetType())
                 .ToList();
 
-            return types.All(Validate);
+            var valid = types.All(Validate);
+            return valid;
         }
 
         private bool Validate(Type type)
@@ -111,6 +112,10 @@ namespace NoteMe.Client.ViewModels
             if (!_validators.ContainsKey(type))
             {
                 var validatorToAdd = _viewModelFacade.ValidationDispatcher.GetValidator(type);
+                if (validatorToAdd == null)
+                {
+                    return true;
+                }
                 _validators.Add(type, validatorToAdd);
             }
 

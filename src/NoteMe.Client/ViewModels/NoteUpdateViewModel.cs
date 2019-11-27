@@ -63,6 +63,12 @@ namespace NoteMe.Client.ViewModels
             UploadCommand = new Command(async () => await AddAttachmentAsync());
         }
 
+        protected override void IsValidChanged()
+        {
+            ((Command)SaveCommand).ChangeCanExecute();
+            base.IsValidChanged();
+        }
+
         private void CurrentAttachmentChangedHandler()
         {
 
@@ -70,7 +76,10 @@ namespace NoteMe.Client.ViewModels
         
         private async Task UpdateNoteAsync()
         {
-            MapTo(this, _note);
+            _note.Name = Name;
+            _note.Content = Content;
+            _note.Attachments = Attachments;
+            _note.Tags = Tags;
 
             await DispatchCommandAsync(new UpdateNoteSqliteCommand(_note));
         }

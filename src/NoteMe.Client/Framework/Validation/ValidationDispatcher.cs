@@ -20,10 +20,18 @@ namespace NoteMe.Client.Framework.Validation
         
         public IValidator GetValidator(Type type)
         {
-            var validatorType = typeof(IValidator<>).MakeGenericType(type);
-            var validator = _container.Resolve(validatorType) as IValidator;
+            try
+            {
 
-            return validator;
+                var validatorType = typeof(IValidator<>).MakeGenericType(type);
+                var validator = _container.Resolve(validatorType) as IValidator;
+
+                return validator;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

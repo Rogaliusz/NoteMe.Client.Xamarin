@@ -53,7 +53,7 @@
                     
                     <StackLayout Grid.Row="4">
                         <Label Style="{StaticResource ErrorLabelStyle}" Text="{Binding Error}"></Label>
-                        <Button Text="{extensions:Translate Save}" Command="{Binding CreateCommand}"></Button>
+                        <Button Text="{extensions:Translate Save}" Command="{Binding SaveCommand}"></Button>
                     </StackLayout>
 
                 </Grid>
