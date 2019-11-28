@@ -61,33 +61,9 @@ namespace NoteMe.Client
         
         private void InitializeDependencies()
         {
+            IoC.Container.RegisterDependencies();
+            
             Container = TinyIoCContainer.Current;
-            
-            Container.AutoRegister();
-
-            var mapper = NoteMeMapperConfiguration.Create();
-            Container.Register<IMapper>(mapper);
-            
-            RegisterAll(typeof(ISynchronizationHandler));
-            RegisterAll(typeof(ICommandHandler));
-            RegisterAll(typeof(IQueryHandler));
-            RegisterAll(typeof(IValidator));
-        }
-
-        private void RegisterAll(Type type)
-        {
-            var types = new [] {typeof(App).Assembly, typeof(IValidator).Assembly}
-                .SelectMany(x => x.GetTypes())
-                .Where( x => type.IsAssignableFrom(x));
-
-            foreach (var impType in types.Where(x => !x.IsAbstract))
-            {
-                var interfaces = impType.GetInterfaces();
-                foreach (var @interface in interfaces)
-                {
-                    Container.Register(@interface, impType);
-                }
-            }
         }
         
         private void InitializeSubscriptions()

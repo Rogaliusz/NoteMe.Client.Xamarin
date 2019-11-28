@@ -22,34 +22,40 @@ namespace NoteMe.Client.Domain.Notes
         IQueryHandler<GetNoteQuery, Note>
     {
         private readonly INoteMeClientMapper _mapper;
-        private readonly NoteMeSqlLiteContext _noteMeSqlLiteContext;
+        private readonly INoteMeContextFactory _factory;
 
         public NoteQueryHandler(
             INoteMeClientMapper mapper,
-            NoteMeSqlLiteContext noteMeSqlLiteContext)
+            INoteMeContextFactory factory)
         {
             _mapper = mapper;
-            _noteMeSqlLiteContext = noteMeSqlLiteContext;
+            _factory = factory;
         }
         
         public async Task<ICollection<Note>> HandleAsync(GetActiveNotesQuery query)
         {
-            var list = await _noteMeSqlLiteContext.Notes
-                .Where(x => x.Status == StatusEnum.Normal)
-                .OrderByDescending(x => x.CreatedAt)
-                .Skip(query.Page * query.PageSize)
-                .Take(query.PageSize)
-                .ToListAsync();
+            using (var context = _factory.CreateContext())
+            {
+                var list = await context.Notes
+                    .Where(x => x.Status == StatusEnum.Normal)
+                    .OrderByDescending(x => x.CreatedAt)
+                    .Skip(query.Page * query.PageSize)
+                    .Take(query.PageSize)
+                    .ToListAsync();
 
-            return _mapper.MapTo<ICollection<Note>>(list);
+                return _mapper.MapTo<ICollection<Note>>(list);
+            }
         }
 
         public Task<Note> HandleAsync(GetNoteQuery query)
         {
-            return _noteMeSqlLiteContext.Notes
-                .AsTracking()
-                .Include(x => x.Attachments)
-                .FirstAsync(x => x.Id == query.Id);
+            using (var context = _factory.CreateContext())
+            {
+                return context.Notes
+                    .AsNoTracking()
+                    .Include(x => x.Attachments)
+                    .FirstAsync(x => x.Id == query.Id);
+            }
         }
     }
 }

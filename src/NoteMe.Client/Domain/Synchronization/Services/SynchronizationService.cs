@@ -21,13 +21,16 @@ namespace NoteMe.Client.Domain.Synchronization.Services
     public class SynchronizationService : ISynchronizationService
     {
         private static readonly SemaphoreSlim _synchronizationSemaphore = new SemaphoreSlim(1);
+        private readonly INoteMeContextFactory _contextFactory;
         private readonly ISynchronizationDispatcher _dispatcher;
         private readonly TinyIoCContainer _container;
 
         public SynchronizationService(
+            INoteMeContextFactory contextFactory,
             ISynchronizationDispatcher dispatcher,
             TinyIoCContainer container)
         {
+            _contextFactory = contextFactory;
             _dispatcher = dispatcher;
             _container = container;
         }
@@ -45,7 +48,7 @@ namespace NoteMe.Client.Domain.Synchronization.Services
                     return;
                 }
 
-                using (var dbContext = new NoteMeSqlLiteContext(_container.Resolve<SqliteSettings>()))
+                using (var dbContext = _contextFactory.CreateContext())
                 {
                     var existed = await dbContext.Synchronizations.ToListAsync(cts);
                     var toInsert = GetDefaultSynchronizations().Where(x => !existed.Any(e => e.Type == x.Type));
@@ -92,7 +95,7 @@ namespace NoteMe.Client.Domain.Synchronization.Services
 
         private async Task SynchronizeAsync(
             Synchronization synchronization, 
-            NoteMeSqlLiteContext context,
+            NoteMeContext context,
             CancellationToken cts)
         {
             await _dispatcher.DispatchAsync(synchronization, context, cts);

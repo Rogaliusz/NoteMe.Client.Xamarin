@@ -33,12 +33,11 @@ namespace NoteMe.Client.iOS
             global::Xamarin.Forms.Forms.Init();
 
             var settings = CreateSqlSettings();
-
-            LoadApplication(new App());
-
             TinyIoCContainer.Current.Register(settings);
             TinyIoCContainer.Current.Register<IFilePathService, FilePathService>();
 
+            LoadApplication(new App());
+            
             return base.FinishedLaunching(app, options);
         }
 

@@ -38,7 +38,7 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
         
         public async Task HandleAsync(
             Domain.Synchronization.Synchronization synchronization, 
-            NoteMeSqlLiteContext context, 
+            NoteMeContext context, 
             CancellationToken cts)
         {
             await FetchAllAttachmentsAsync(synchronization, context, cts);
@@ -48,7 +48,7 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
             await UploadAllAttachmentsAsync(context, cts);
         }
         
-        private async Task FetchAllAttachmentsAsync(Domain.Synchronization.Synchronization synchronization, NoteMeSqlLiteContext context,
+        private async Task FetchAllAttachmentsAsync(Domain.Synchronization.Synchronization synchronization, NoteMeContext context,
             CancellationToken cts)
         {
             cts.ThrowIfCancellationRequested();
@@ -89,7 +89,7 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
             await context.SaveChangesAsync(cts);
         }
         
-        private async Task CreateAllAttachmentsAsync(Domain.Synchronization.Synchronization synchronization, NoteMeSqlLiteContext context, CancellationToken cts)
+        private async Task CreateAllAttachmentsAsync(Domain.Synchronization.Synchronization synchronization, NoteMeContext context, CancellationToken cts)
         {
             cts.ThrowIfCancellationRequested();
 
@@ -113,7 +113,7 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
         }
         
         private async Task UploadAllAttachmentsAsync(
-            NoteMeSqlLiteContext context, 
+            NoteMeContext context, 
             CancellationToken cts)
         {
             cts.ThrowIfCancellationRequested();
@@ -133,7 +133,7 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
         }
 
 
-        private async Task DownloadAllAttachmentsAsync(NoteMeSqlLiteContext context, CancellationToken cts)
+        private async Task DownloadAllAttachmentsAsync(NoteMeContext context, CancellationToken cts)
         {
             cts.ThrowIfCancellationRequested();
 

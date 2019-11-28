@@ -10,7 +10,7 @@ namespace NoteMe.Client.Domain.Synchronization.Handlers
 {
     public interface ISynchronizationDispatcher
     {
-        Task DispatchAsync(Synchronization synchronization, NoteMeSqlLiteContext context, CancellationToken ctx);
+        Task DispatchAsync(Synchronization synchronization, NoteMeContext context, CancellationToken ctx);
     }
     
     public class SynchronizationDispatcher : ISynchronizationDispatcher
@@ -22,7 +22,7 @@ namespace NoteMe.Client.Domain.Synchronization.Handlers
             _container = container;
         }
         
-        public Task DispatchAsync(Synchronization synchronization, NoteMeSqlLiteContext context, CancellationToken ctx)
+        public Task DispatchAsync(Synchronization synchronization, NoteMeContext context, CancellationToken ctx)
         {
             ctx.ThrowIfCancellationRequested();
                 

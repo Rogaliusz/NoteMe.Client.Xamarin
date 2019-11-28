@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using NoteMe.Client.Framework.Extensions;
 using NoteMe.Client.Framework.Platform;
+using NoteMe.Client.Framework.Ui;
 using NoteMe.Common.DataTypes;
 using NoteMe.Common.DataTypes.Enums;
 using Plugin.FilePicker;
@@ -14,28 +16,32 @@ namespace NoteMe.Client.Domain.Notes.Handlers
 {
     public interface IAttachmentHandler
     {
-        Task AddAsync(ICollection<Attachment> attachments);
+        Task<Attachment> AddAsync(ICollection<Attachment> attachments);
 
         Task OpenAsync(Attachment note);
     }
 
     public class AttachmentHandlers : IAttachmentHandler
     {
+        private readonly IDialogService _dialogService;
         private readonly IFilePathService _filePathService;
 
-        public AttachmentHandlers(IFilePathService filePathService)
+        public AttachmentHandlers(
+            IDialogService dialogService,
+            IFilePathService filePathService)
         {
+            _dialogService = dialogService;
             _filePathService = filePathService;
         }
         
-        public async Task AddAsync(ICollection<Attachment> attachments)
+        public async Task<Attachment> AddAsync(ICollection<Attachment> attachments)
         {
             var data = await CrossFilePicker.Current.PickFile();
             var newPath = Path.Combine(_filePathService.GetFilesDirectory(), data?.FileName ?? string.Empty);
             
             if (data == null || attachments.Any(x => x.Path == newPath))
             {
-                return;
+                return null;
             }
 
             var attachment = new Attachment
@@ -50,16 +56,19 @@ namespace NoteMe.Client.Domain.Notes.Handlers
             File.WriteAllBytes(newPath, data.DataArray);
 
             attachments.Add(attachment);
+
+            return attachment;
         }
 
         public async Task OpenAsync(Attachment attachment)
         {
-            var openFileRequest = new OpenFileRequest
+            if (!File.Exists(attachment.Path))
             {
-                File = new ReadOnlyFile(attachment.Path)
-            };
-
-            await Launcher.OpenAsync(openFileRequest);
+                await _dialogService.ShowTranslatedDialogAsync("WaitForDownload", "FileDownloadingInProgress");
+                return;
+            }
+            
+            await Launcher.OpenAsync(attachment.Path);
         }
     }
 }

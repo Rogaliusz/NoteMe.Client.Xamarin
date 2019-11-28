@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ using NoteMe.Common.Domain.Pagination;
 using N.Publisher;
 using NoteMe.Client.Domain.Notes.Messages;
 using NoteMe.Common.DataTypes.Enums;
+using NoteMe.Common.Providers;
 
 namespace NoteMe.Client.Domain.Notes.Synchronization
 {
@@ -35,13 +37,14 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
             _webService = webService;
         }
         
-        public async Task HandleAsync(Domain.Synchronization.Synchronization synchronization, NoteMeSqlLiteContext context, CancellationToken cts)
+        public async Task HandleAsync(Domain.Synchronization.Synchronization synchronization, NoteMeContext context, CancellationToken cts)
         {
             await FetchAllResultsAsync(synchronization, context, cts);
             await SendAllNotesAsync(context, cts);
+            await UpdateAllNotesAsync(context, cts);
         }
         
-        private async Task FetchAllResultsAsync(Domain.Synchronization.Synchronization synchronization, NoteMeSqlLiteContext context, CancellationToken cts)
+        private async Task FetchAllResultsAsync(Domain.Synchronization.Synchronization synchronization, NoteMeContext context, CancellationToken cts)
         {
             cts.ThrowIfCancellationRequested();
 
@@ -65,7 +68,6 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
                     return;
                 }
                 
-
                 hasMore = notes.Data.Count == query.PageSize;
 
                 foreach (var noteDto in notes.Data)
@@ -95,15 +97,41 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
             NPublisher.PublishIt(new NewNotesMessage(allNotes));
         }
         
-        private async Task SendAllNotesAsync(NoteMeSqlLiteContext context, CancellationToken cts)
+        private async Task SendAllNotesAsync(NoteMeContext context, CancellationToken cts)
+        {
+            await SendNotesToApi<CreateNoteCommand>(
+                (cmd) => _webService.SendAsync<NoteDto>(HttpMethod.Post, Endpoints.Notes._, cmd),
+                note => note.StatusSynchronization == SynchronizationStatusEnum.NeedInsert,
+                context,
+                cts);
+        }
+        
+        private async Task UpdateAllNotesAsync(NoteMeContext context, CancellationToken cts)
+        {
+            await SendNotesToApi<UpdateNoteCommand>(
+                (cmd) => _webService.SendAsync<NoteDto>(HttpMethod.Put, Endpoints.Notes._ + cmd.Id, cmd),
+                note => note.StatusSynchronization == SynchronizationStatusEnum.NeedUpdate,
+                context,
+                cts);
+        }
+
+        private async Task SendNotesToApi<TCommand>(Func<TCommand, Task<NoteDto>> sendAsync,
+            Expression<Func<Note, bool>> predicate,
+            NoteMeContext context, 
+            CancellationToken cts)
+            where TCommand : IIdProvider
         {
             cts.ThrowIfCancellationRequested();
 
-            var toInserts = await context.Notes.AsTracking().Where(x => x.StatusSynchronization == SynchronizationStatusEnum.NeedInsert).ToListAsync(cts);
-            var insertsCommands = _mapper.MapTo<ICollection<CreateNoteCommand>>(toInserts);
+            var toInserts = await context.Notes
+                .AsTracking()
+                .Where(predicate)
+                .ToListAsync(cts);
+            
+            var insertsCommands = _mapper.MapTo<ICollection<TCommand>>(toInserts);
             foreach (var command in insertsCommands)
             {
-                var created = await _webService.SendAsync<NoteDto>(HttpMethod.Post, Endpoints.Notes._, command);
+                var created = await sendAsync.Invoke(command);
                 var entity = toInserts.First(x => x.Id == command.Id);
                 
                 entity.LastSynchronization = DateTime.UtcNow;

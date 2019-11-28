@@ -11,11 +11,11 @@ namespace NoteMe.Client.Domain.Synchronization.Services
     public class CleanService : ICleanService
     {
         private readonly ApiWebSettings _apiWebSettings;
-        private readonly NoteMeSqlLiteContext _context;
+        private readonly NoteMeContext _context;
 
         public CleanService(
             ApiWebSettings apiWebSettings,
-            NoteMeSqlLiteContext context)
+            NoteMeContext context)
         {
             _apiWebSettings = apiWebSettings;
             _context = context;

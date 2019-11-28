@@ -7,7 +7,7 @@ using NoteMe.Client.Domain.Synchronization.Sql;
 
 namespace NoteMe.Client.Sql
 {
-    public class NoteMeSqlLiteContext : DbContext
+    public class NoteMeContext : DbContext
     {
         private readonly SqliteSettings _settings;
         
@@ -15,7 +15,7 @@ namespace NoteMe.Client.Sql
         public DbSet<Note> Notes { get; set; }
         public DbSet<Synchronization> Synchronizations { get; set; }
 
-        public NoteMeSqlLiteContext(SqliteSettings settings)
+        public NoteMeContext(SqliteSettings settings)
         {
             _settings = settings;
             

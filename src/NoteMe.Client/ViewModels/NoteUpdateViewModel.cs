@@ -63,7 +63,7 @@ namespace NoteMe.Client.ViewModels
             
             SaveCommand = new Command(async () => await UpdateNoteAsync(), Validate);
             UploadCommand = new Command(async () => await AddAttachmentAsync());
-            OpenAttachmentCommand = new Command(async () => await _attachmentHandler.OpenAsync(CurrentAttachment));
+            OpenAttachmentCommand = new Command(async () => await _attachmentHandler.OpenAsync(CurrentAttachment ?? Attachments.FirstOrDefault()));
         }
 
         protected override void IsValidChanged()
@@ -87,8 +87,8 @@ namespace NoteMe.Client.ViewModels
             await DispatchCommandAsync(new UpdateNoteSqliteCommand(_note));
         }
 
-        private Task AddAttachmentAsync()
-            => _attachmentHandler.AddAsync(Attachments);
+        private async Task AddAttachmentAsync()
+            => CurrentAttachment = await _attachmentHandler.AddAsync(Attachments) ?? CurrentAttachment;
 
         public override async Task InitializeAsync(object parameter = null)
         {
