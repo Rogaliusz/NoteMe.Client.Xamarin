@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.0" />
+    <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
     <PackageReference Include="Xamarin.Forms" Version="4.3.0.991211" />
     <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
     <PackageReference Include="Xamarin.Essentials" Version="1.2.0" />
@@ -72,6 +73,7 @@
     <AndroidResource Include="Resources\drawable\logged_background.png" />
     <AndroidResource Include="Resources\drawable\logout_icon.png" />
     <AndroidResource Include="Resources\drawable\note_icon.png" />
+    <AndroidResource Include="Resources\drawable\photo_icon.png" />
     <AndroidResource Include="Resources\drawable\unlogged_background.png">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>

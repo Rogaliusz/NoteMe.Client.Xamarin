@@ -8,7 +8,11 @@ using NoteMe.Client.Framework.Platform;
 using NoteMe.Client.Framework.Ui;
 using NoteMe.Common.DataTypes;
 using NoteMe.Common.DataTypes.Enums;
+using NoteMe.Common.Extensions;
 using Plugin.FilePicker;
+using Plugin.Media;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -16,7 +20,7 @@ namespace NoteMe.Client.Domain.Notes.Handlers
 {
     public interface IAttachmentHandler
     {
-        Task<Attachment> AddAsync(ICollection<Attachment> attachments);
+        Task<Attachment> TakePhotoAsync(ICollection<Attachment> attachments);
 
         Task OpenAsync(Attachment note);
     }
@@ -34,41 +38,65 @@ namespace NoteMe.Client.Domain.Notes.Handlers
             _filePathService = filePathService;
         }
         
-        public async Task<Attachment> AddAsync(ICollection<Attachment> attachments)
+        public async Task<Attachment> TakePhotoAsync(ICollection<Attachment> attachments)
         {
-            var data = await CrossFilePicker.Current.PickFile();
-            var newPath = Path.Combine(_filePathService.GetFilesDirectory(), data?.FileName ?? string.Empty);
+            await CrossMedia.Current.Initialize();
             
-            if (data == null || attachments.Any(x => x.Path == newPath))
+            var cameraStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Camera);
+            var storageStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Storage);
+
+            if (cameraStatus != PermissionStatus.Granted || storageStatus != PermissionStatus.Granted)
             {
+                await CrossPermissions.Current.RequestPermissionsAsync(Permission.Camera);
+                await CrossPermissions.Current.RequestPermissionsAsync(Permission.Storage);
+            }
+            
+            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+            {
+                await _dialogService.ShowDialogAsync("NoCameraTitle", "NoCameraContent", "OK");
+                return null;
+            }
+            
+            var photo = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions() { });
+            if (photo == null)
+            {
+                await _dialogService.ShowDialogAsync("NoCameraTitle", "NoCameraContent", "OK");
                 return null;
             }
 
-            var attachment = new Attachment
+            using (var streamImage = photo.GetStream())
             {
-                Id = Guid.NewGuid(),
-                NeedSynchronization = true,
-                StatusSynchronization = SynchronizationStatusEnum.NeedInsert,
-                Path = newPath,
-                Name = data.FileName
-            };
-            
-            File.WriteAllBytes(newPath, data.DataArray);
+                var name = Path.GetFileName(photo.Path);
+                var newPath = Path.Combine(_filePathService.GetFilesDirectory(), name ?? string.Empty);
+                
+                var attachment = new Attachment
+                {
+                    Id = Guid.NewGuid(),
+                    NeedSynchronization = true,
+                    StatusSynchronization = SynchronizationStatusEnum.NeedInsert,
+                    Path = newPath,
+                    Name = name
+                };
 
-            attachments.Add(attachment);
+                
+                File.WriteAllBytes(newPath, streamImage.ReadFully());
 
-            return attachment;
+                attachments.Add(attachment);
+
+                return attachment;
+            }
         }
 
         public async Task OpenAsync(Attachment attachment)
         {
             if (!File.Exists(attachment.Path))
             {
-                await _dialogService.ShowTranslatedDialogAsync("WaitForDownload", "FileDownloadingInProgress");
+                await _dialogService.ShowTranslatedDialogAsync("WaitForDownloadTitle", "WaitForDownloadContent");
                 return;
             }
             
-            await Launcher.OpenAsync(attachment.Path);
+            var uri = new Uri(attachment.Path);
+            await Launcher.OpenAsync(uri);
         }
     }
 }

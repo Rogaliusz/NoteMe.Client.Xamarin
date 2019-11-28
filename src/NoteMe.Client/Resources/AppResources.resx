@@ -52,6 +52,18 @@
     <data name="NoteCreate" xml:space="preserve">
         <value>Create Note</value>
     </data>
+    <data name="NoCameraTitle" xml:space="preserve">
+        <value>Camera isn't available</value>
+    </data>
+    <data name="NoCameraContent" xml:space="preserve">
+        <value>This device have a problem with access to camera</value>
+    </data>
+    <data name="WaitForDownloadTitle" xml:space="preserve">
+        <value>File is downloading..</value>
+    </data>
+    <data name="WaitForDownloadContent" xml:space="preserve">
+        <value>File isn't available on Your device. Please wait for a synchronization.</value>
+    </data>
     <data name="Logout" xml:space="preserve">
         <value>Logout</value>
     </data>

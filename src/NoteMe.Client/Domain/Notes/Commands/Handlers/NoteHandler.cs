@@ -60,8 +60,23 @@ namespace NoteMe.Client.Domain.Notes.Commands
         {
             using (var context = _factory.CreateContext())
             {
-                command.Note.StatusSynchronization = SynchronizationStatusEnum.NeedUpdate;
-                context.Update(command.Note);
+                var note = command.Note;
+                note.StatusSynchronization = SynchronizationStatusEnum.NeedUpdate;
+                
+                context.Update(note);
+
+                foreach (var attachment in note.Attachments)
+                {
+                    if (context.Attachments.Any(x => x.Id == attachment.Id))
+                    {
+                        context.Update(attachment);
+                    }
+                    else
+                    {
+                        context.Add(attachment);
+                    }
+                }
+
                 await context.SaveChangesAsync();
             }
         }

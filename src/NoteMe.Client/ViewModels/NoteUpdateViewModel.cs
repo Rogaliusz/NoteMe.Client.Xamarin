@@ -88,7 +88,7 @@ namespace NoteMe.Client.ViewModels
         }
 
         private async Task AddAttachmentAsync()
-            => CurrentAttachment = await _attachmentHandler.AddAsync(Attachments) ?? CurrentAttachment;
+            => CurrentAttachment = await _attachmentHandler.TakePhotoAsync(Attachments) ?? CurrentAttachment;
 
         public override async Task InitializeAsync(object parameter = null)
         {

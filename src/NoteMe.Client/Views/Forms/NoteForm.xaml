@@ -43,7 +43,7 @@
                                  BackgroundColor="{StaticResource Background}" 
                                  VerticalOptions="FillAndExpand" 
                                  HorizontalOptions="FillAndExpand">
-                        <ImageButton Source="upload_icon.png" 
+                        <ImageButton Source="photo_icon.png" 
                                      HorizontalOptions="CenterAndExpand"
                                      VerticalOptions="CenterAndExpand"
                                      HeightRequest="45"

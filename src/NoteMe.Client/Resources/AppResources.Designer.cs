@@ -112,6 +112,30 @@ namespace NoteMe.Client.Resources {
             }
         }
         
+        public static string NoCameraTitle {
+            get {
+                return ResourceManager.GetString("NoCameraTitle", resourceCulture);
+            }
+        }
+        
+        public static string NoCameraContent {
+            get {
+                return ResourceManager.GetString("NoCameraContent", resourceCulture);
+            }
+        }
+        
+        public static string WaitForDownloadTitle {
+            get {
+                return ResourceManager.GetString("WaitForDownloadTitle", resourceCulture);
+            }
+        }
+        
+        public static string WaitForDownloadContent {
+            get {
+                return ResourceManager.GetString("WaitForDownloadContent", resourceCulture);
+            }
+        }
+        
         public static string Logout {
             get {
                 return ResourceManager.GetString("Logout", resourceCulture);
