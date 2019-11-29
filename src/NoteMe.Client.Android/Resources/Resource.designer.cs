@@ -5800,25 +5800,28 @@ namespace NoteMe.Client.Droid
 			public const int notify_panel_notification_icon_bg = 2131165303;
 			
 			// aapt resource value: 0x7F070078
-			public const int tab_about = 2131165304;
+			public const int photo_icon = 2131165304;
 			
 			// aapt resource value: 0x7F070079
-			public const int tab_feed = 2131165305;
+			public const int tab_about = 2131165305;
 			
 			// aapt resource value: 0x7F07007A
-			public const int tooltip_frame_dark = 2131165306;
+			public const int tab_feed = 2131165306;
 			
 			// aapt resource value: 0x7F07007B
-			public const int tooltip_frame_light = 2131165307;
+			public const int tooltip_frame_dark = 2131165307;
 			
 			// aapt resource value: 0x7F07007C
-			public const int unlogged_background = 2131165308;
+			public const int tooltip_frame_light = 2131165308;
 			
 			// aapt resource value: 0x7F07007D
-			public const int upload_icon = 2131165309;
+			public const int unlogged_background = 2131165309;
 			
 			// aapt resource value: 0x7F07007E
-			public const int xamarin_logo = 2131165310;
+			public const int upload_icon = 2131165310;
+			
+			// aapt resource value: 0x7F07007F
+			public const int xamarin_logo = 2131165311;
 			
 			static Drawable()
 			{
@@ -11444,7 +11447,10 @@ namespace NoteMe.Client.Droid
 		{
 			
 			// aapt resource value: 0x7F100000
-			public const int xamarin_essentials_fileprovider_file_paths = 2131755008;
+			public const int file_paths = 2131755008;
+			
+			// aapt resource value: 0x7F100001
+			public const int xamarin_essentials_fileprovider_file_paths = 2131755009;
 			
 			static Xml()
 			{

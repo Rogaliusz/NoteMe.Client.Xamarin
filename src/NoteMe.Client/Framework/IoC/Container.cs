@@ -91,6 +91,7 @@ namespace IoC
         
         private static void RegisterOthers()
         {
+            _container.Register<ICleanService, CleanService>();
             _container.Register<IAttachmentHandler, AttachmentHandlers>();
             _container.Register<ITranslationService, TranslationService>();
         }

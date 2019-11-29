@@ -9,6 +9,9 @@ using Android.OS;
 using NoteMe.Client.Sql;
 using TinyIoC;
 using Environment = System.Environment;
+using NoteMe.Client.Droid.Platform;
+using NoteMe.Client.Framework.Platform;
+using Plugin.CurrentActivity;
 
 namespace NoteMe.Client.Droid
 {
@@ -25,11 +28,16 @@ namespace NoteMe.Client.Droid
             global::Xamarin.Forms.Forms.SetFlags("CollectionView_Experimental");
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            CrossCurrentActivity.Current.Init(this, savedInstanceState);
+
+            this.InitializeSqlite();
+            this.InitializePlaformServices();
 
             LoadApplication(new App());
 
-            this.InitializeSqlite();
+
         }
+
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -46,6 +54,11 @@ namespace NoteMe.Client.Droid
             };
 
             TinyIoCContainer.Current.Register(settings);
+        }
+
+        private void InitializePlaformServices()
+        {
+            TinyIoCContainer.Current.Register<IFilePathService, FilePathService>();
         }
     }
 }

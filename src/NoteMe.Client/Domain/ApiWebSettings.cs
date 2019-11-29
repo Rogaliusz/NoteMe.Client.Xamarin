@@ -14,7 +14,7 @@ namespace NoteMe.Client.Domain
 
         public string Address
         {
-            get => Preferences.Get(AddressKey, "https://localhost:5001");
+            get => Preferences.Get(AddressKey, "http://51.38.131.197:70");
             set => Preferences.Set(AddressKey, value);
         }
 
