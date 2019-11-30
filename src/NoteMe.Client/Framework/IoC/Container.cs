@@ -8,6 +8,7 @@ using NoteMe.Client.Domain.Synchronization.Handlers;
 using NoteMe.Client.Domain.Synchronization.Services;
 using NoteMe.Client.Framework;
 using NoteMe.Client.Framework.Cqrs;
+using NoteMe.Client.Framework.Device;
 using NoteMe.Client.Framework.Extensions;
 using NoteMe.Client.Framework.Mappers;
 using NoteMe.Client.Framework.Ui;
@@ -33,6 +34,7 @@ namespace IoC
             RegisterViewModels();
             RegisterSql();
             RegisterMapper();
+            RegisterFramework();
             RegisterOthers();
 
             RegisterAll(typeof(ISynchronizationHandler));
@@ -88,7 +90,14 @@ namespace IoC
             _container.Register<IMapper>(mapper);
             _container.Register<INoteMeClientMapper, NoteMeClientMapper>();
         }
-        
+
+        private static void RegisterFramework()
+        {
+            _container.Register<IPermissionService, PermissionService>();
+            _container.Register<IGeolocationService, GeolocationService>();
+            _container.Register<ICameraService, CameraService>();
+        }
+
         private static void RegisterOthers()
         {
             _container.Register<ICleanService, CleanService>();

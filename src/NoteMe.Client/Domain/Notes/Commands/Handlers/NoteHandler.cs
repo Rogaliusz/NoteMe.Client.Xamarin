@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using N.Publisher;
 using NoteMe.Client.Domain.Notes.Messages;
 using NoteMe.Client.Framework.Cqrs;
+using NoteMe.Client.Framework.Device;
 using NoteMe.Client.Framework.Mappers;
 using NoteMe.Client.Sql;
 using NoteMe.Common.DataTypes.Enums;
@@ -16,13 +17,16 @@ namespace NoteMe.Client.Domain.Notes.Commands
     public class NoteHandler : ICommandHandler<CreateNoteInSqliteCommand>,
         ICommandHandler<UpdateNoteSqliteCommand>
     {
+        private readonly IGeolocationService _geolocationService;
         private readonly INoteMeClientMapper _mapper;
         private readonly INoteMeContextFactory _factory;
 
         public NoteHandler(
+            IGeolocationService geolocationService,
             INoteMeClientMapper mapper,
             INoteMeContextFactory factory)
         {
+            _geolocationService = geolocationService;
             _mapper = mapper;
             _factory = factory;
         }
@@ -38,9 +42,9 @@ namespace NoteMe.Client.Domain.Notes.Commands
 
                 try
                 {
-                    var geo = await Geolocation.GetLastKnownLocationAsync();
-                    note.Latitude = (decimal) geo.Latitude;
-                    note.Longitude = (decimal) geo.Longitude;
+                    var (lot, lat) = await _geolocationService.GeLocationAsync();
+                    note.Latitude = lat;
+                    note.Longitude = lot;
                 }
                 catch (PermissionException)
                 {

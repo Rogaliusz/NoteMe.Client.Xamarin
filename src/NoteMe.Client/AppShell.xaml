@@ -42,7 +42,12 @@
     
     <Shell.ItemTemplate>
         <DataTemplate>
-            <Grid x:Name="ItemGrid">
+            <Grid x:Name="ItemGrid" >
+                <Grid.Margin>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="Android" Value="20, 20, 20, 20" />
+                    </OnPlatform>
+                </Grid.Margin>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.2*" />
                     <ColumnDefinition Width="0.8*" />

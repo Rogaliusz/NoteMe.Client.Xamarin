@@ -20,8 +20,8 @@ namespace NoteMe.Client.Domain.Notes
         public DateTime? LastSynchronization { get; set; }
         public bool NeedSynchronization { get; set; }
         public SynchronizationStatusEnum StatusSynchronization { get; set; }
-        public decimal Latitude { get; set; }
-        public decimal Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
      
         public Guid? ActualNoteId { get; set; }
         

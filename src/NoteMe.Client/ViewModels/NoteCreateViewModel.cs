@@ -85,6 +85,12 @@ namespace NoteMe.Client.ViewModels
 
             await DispatchCommandAsync(command);
             await NavigateTo("//notes");
+
+            Name = string.Empty;
+            Tags = string.Empty;
+            Content = string.Empty;
+
+            Attachments.Clear();
         }
         
         private void CurrentAttachmentChangedHandler()

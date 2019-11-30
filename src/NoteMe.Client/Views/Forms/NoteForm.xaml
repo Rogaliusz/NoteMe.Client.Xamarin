@@ -14,12 +14,14 @@
                 <Grid RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width}"
                       RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height}"
                       Margin="20"
-                      RowSpacing="20">
+                      RowSpacing="20"
+                        VerticalOptions="StartAndExpand">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0.1*"></RowDefinition>
-                        <RowDefinition Height="0.4*"></RowDefinition>
                         <RowDefinition Height="0.2*"></RowDefinition>
                         <RowDefinition Height="0.2*"></RowDefinition>
+                        <RowDefinition Height="0.2*"></RowDefinition>
+                        <RowDefinition Height="0.1*"></RowDefinition>
                         <RowDefinition Height="0.1*"></RowDefinition>
                     </Grid.RowDefinitions>
                     
@@ -32,6 +34,11 @@
                                  BackgroundColor="{StaticResource Background}"
                                  VerticalOptions="FillAndExpand" 
                                  HorizontalOptions="FillAndExpand">
+                        <StackLayout.Margin>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="Android" Value="0, 20, 0, 0"></On>
+                            </OnPlatform>
+                        </StackLayout.Margin>
                         <Editor Placeholder="{extensions:Translate Content}" 
                                 Text="{Binding Content}"
                                 BackgroundColor="{StaticResource Background}"></Editor>

@@ -24,5 +24,6 @@
   <ItemGroup>
     <Folder Include="Domain\Synchronization\Mappers" />
     <Folder Include="Framework\Publisher" />
+    <Folder Include="Framework\Device\" />
   </ItemGroup>
 </Project>
