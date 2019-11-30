@@ -14,11 +14,11 @@ namespace NoteMe.Client
             Routing.RegisterRoute("login", typeof(LoginView));
             Routing.RegisterRoute("register", typeof(RegisterView));
             Routing.RegisterRoute("notes/details", typeof(UpdateNoteView));
+            Routing.RegisterRoute("notes/attachment", typeof(ImageView));
 
             InitializeComponent();
 
             SetTabBarIsVisible(this, false);
-            
         }
 
         private void AppShell_OnNavigated(object sender, ShellNavigatedEventArgs e)

@@ -15,6 +15,7 @@ using NoteMe.Client.Framework.Ui;
 using NoteMe.Client.Framework.Validation;
 using NoteMe.Client.Sql;
 using NoteMe.Client.ViewModels;
+using NoteMe.Client.Views;
 using TinyIoC;
 
 namespace IoC
@@ -73,7 +74,8 @@ namespace IoC
             _container.Register<NoteViewModel>();
             _container.Register<NoteCreateViewModel>();
             _container.Register<NoteUpdateViewModel>();
-
+            _container.Register<ImageViewModel>();
+            
             _container.Register<IViewModelFacade, ViewModelFacade>();
         }
 

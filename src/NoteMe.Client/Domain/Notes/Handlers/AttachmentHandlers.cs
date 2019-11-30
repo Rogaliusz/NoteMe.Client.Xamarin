@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using NoteMe.Client.Framework;
 using NoteMe.Client.Framework.Extensions;
 using NoteMe.Client.Framework.Platform;
 using NoteMe.Client.Framework.Ui;
@@ -27,13 +28,16 @@ namespace NoteMe.Client.Domain.Notes.Handlers
 
     public class AttachmentHandlers : IAttachmentHandler
     {
+        private readonly INavigationService _navigationService;
         private readonly IDialogService _dialogService;
         private readonly IFilePathService _filePathService;
 
         public AttachmentHandlers(
+            INavigationService navigationService,
             IDialogService dialogService,
             IFilePathService filePathService)
         {
+            _navigationService = navigationService;
             _dialogService = dialogService;
             _filePathService = filePathService;
         }
@@ -94,9 +98,8 @@ namespace NoteMe.Client.Domain.Notes.Handlers
                 await _dialogService.ShowTranslatedDialogAsync("WaitForDownloadTitle", "WaitForDownloadContent");
                 return;
             }
-            
-            var uri = new Uri(attachment.Path);
-            await Launcher.OpenAsync(uri);
+
+            await _navigationService.NavigateAsync($"//notes/attachment?id={attachment.Id}");
         }
     }
 }

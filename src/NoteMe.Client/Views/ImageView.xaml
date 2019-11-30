@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NoteMe.Client.Views.ImageView"
+             BindingContext="{Binding ImageViewModel, Source={StaticResource ViewModelLocator}}" >
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="{StaticResource Background}">
+            <Label Text="{Binding Title}"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center"></Label>
+            <Image Source="{Binding Image}"
+                   BackgroundColor="{StaticResource Background}"
+                   Aspect="AspectFill"
+                   HorizontalOptions="CenterAndExpand"
+                   VerticalOptions="CenterAndExpand"></Image>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
