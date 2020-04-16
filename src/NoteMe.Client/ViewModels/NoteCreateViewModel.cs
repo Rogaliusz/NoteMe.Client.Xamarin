@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using N.Publisher;
 using NoteMe.Client.Domain.Notes;
 using NoteMe.Client.Domain.Notes.Commands;
 using NoteMe.Client.Domain.Notes.Handlers;
+using NoteMe.Client.Domain.Notes.Messages;
 using NoteMe.Client.Framework.Platform;
 using NoteMe.Client.ViewModels.Forms;
 using NoteMe.Common.DataTypes.Enums;
@@ -91,6 +93,8 @@ namespace NoteMe.Client.ViewModels
             Content = string.Empty;
 
             Attachments.Clear();
+            
+            NPublisher.PublishIt(new NewNotesMessage());
         }
         
         private void CurrentAttachmentChangedHandler()

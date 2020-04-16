@@ -39,9 +39,9 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
         
         public async Task HandleAsync(Domain.Synchronization.Synchronization synchronization, NoteMeContext context, CancellationToken cts)
         {
+            await UpdateAllNotesAsync(context, cts);
             await FetchAllResultsAsync(synchronization, context, cts);
             await SendAllNotesAsync(context, cts);
-            await UpdateAllNotesAsync(context, cts);
         }
         
         private async Task FetchAllResultsAsync(Domain.Synchronization.Synchronization synchronization, NoteMeContext context, CancellationToken cts)
@@ -73,24 +73,25 @@ namespace NoteMe.Client.Domain.Notes.Synchronization
                 foreach (var noteDto in notes.Data)
                 {
                     var note = await context.Notes.FirstOrDefaultAsync(x => x.Id == noteDto.Id, cts);
-
-                    if (note != null) continue;
-
-                    note = _mapper.MapTo<Note>(noteDto);
-
-                    if (note.Status == StatusEnum.Normal)
+                    if (note != null)
                     {
-                        allNotes.Add(note);
+                        note.Content = noteDto.Content;
+                        note.Tags = noteDto.Tags;
+                        note.Name = noteDto.Name;
                     }
+                    else
+                    {
+                        note = _mapper.MapTo<Note>(noteDto);
 
-                    await context.AddRangeAsync(note);
+                        if (note.Status == StatusEnum.Normal)
+                        {
+                            allNotes.Add(note);
+                        }
+
+                        await context.AddRangeAsync(note);
+                    }
                 }
             } while (hasMore);
-
-            if (!allNotes.Any())
-            {
-                return;
-            }
             
             await context.SaveChangesAsync(cts);
             

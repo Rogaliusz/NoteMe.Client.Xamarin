@@ -3,9 +3,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using N.Publisher;
 using NoteMe.Client.Domain.Notes;
 using NoteMe.Client.Domain.Notes.Commands;
 using NoteMe.Client.Domain.Notes.Handlers;
+using NoteMe.Client.Domain.Notes.Messages;
 using NoteMe.Client.ViewModels.Forms;
 using NoteMe.Common.DataTypes.Domain.Notes.Queries;
 using Xamarin.Forms;
@@ -85,6 +87,8 @@ namespace NoteMe.Client.ViewModels
             _note.Tags = Tags;
 
             await DispatchCommandAsync(new UpdateNoteSqliteCommand(_note));
+            
+            NPublisher.PublishIt(new NewNotesMessage());
         }
 
         private async Task AddAttachmentAsync()
@@ -103,6 +107,7 @@ namespace NoteMe.Client.ViewModels
 
             Name = _note.Name;
             Content = _note.Content;
+            Tags = _note.Tags;
 
             foreach (var attachment in _note.Attachments)
             {

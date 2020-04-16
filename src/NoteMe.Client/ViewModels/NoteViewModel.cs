@@ -24,15 +24,21 @@ namespace NoteMe.Client.ViewModels
         {
             SelectNoteCommand = new Command<Note>(async (x) => await GoToNoteAsync(x));
             
-            _newNotesSubscription = NPublisher.SubscribeIt<NewNotesMessage>(message =>
+            _newNotesSubscription = NPublisher.SubscribeIt<NewNotesMessage>(async message =>
             {
+                var query = new GetActiveNotesQuery();
+                var notes = await DispatchQueryAsync<GetActiveNotesQuery, ICollection<Note>>(query);
+                
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    foreach (var note in message.Notes.Where(x => x.Status == StatusEnum.Normal))
-                    {
-                        Notes.Insert(0, note);
-                    }
+                    Notes.Clear();
                     
+                    foreach (var note in notes)
+                    {
+                        Notes.Add(note);
+                    }                    
+                    
+                    OnPropertyChanged(nameof(Notes));
                     OnPropertyChanged(nameof(Note.CreatedAt));
                     OnPropertyChanged(nameof(Note.Name));
                 });
